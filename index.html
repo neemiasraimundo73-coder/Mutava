@@ -1,0 +1,1238 @@
+<!doctype html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#211b54">
+<title>Gestão Financeira da Igreja</title>
+<style>
+:root{--ink:#211b54;--purple:#5b32c8;--purple2:#7a4ff0;--blue:#1762bd;--lav:#f0edff;--bg:#f5f6fc;--card:#fff;--text:#171934;--muted:#6b6f8a;--line:#e3e5f1;--red:#b3261e;--green:#1e7a46;--amber:#8a5a00;--shadow:0 6px 22px #25245a14;--radius:14px}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);font:14px/1.45 'Segoe UI',Roboto,Arial,sans-serif;color:var(--text)}
+body.dark{--bg:#14142a;--card:#212139;--text:#f1f0ff;--muted:#a3a2bf;--line:#383852;--lav:#322d4d;--ink:#dcd8ff;--shadow:0 6px 22px #0004;--purple:#9a7bff}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}
+.muted{color:var(--muted)}.right{text-align:right}.nowrap{white-space:nowrap}
+.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-4px;flex:none}
+.ic.lg{width:24px;height:24px}.ic.sm{width:15px;height:15px;vertical-align:-3px}
+.center-screen{min-height:100vh;display:grid;place-content:center;text-align:center;color:var(--muted);gap:12px;padding:20px}
+.spinner{width:34px;height:34px;border:3px solid #e2def9;border-top-color:var(--purple);border-radius:50%;animation:spin .8s linear infinite;margin:auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* auth */
+.auth{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;gap:5vw;padding:5vw;align-items:center;color:#fff;background:linear-gradient(135deg,#211b54,#473596 60%,#8d69ef)}
+.ab{max-width:520px}.logo{width:58px;height:58px;border-radius:16px;background:#ffffff22;display:grid;place-items:center;margin-bottom:18px}
+.logo .ic{width:30px;height:30px;stroke-width:2.2}
+.ab h1{font-size:36px;line-height:1.15;margin:0 0 12px}.ab p{font-size:16px;opacity:.88}
+.ab li{margin:8px 0;list-style:none;display:flex;gap:10px;align-items:center}
+.ap{background:var(--card);color:var(--text);border-radius:24px;padding:32px;max-width:470px;width:100%;box-shadow:0 30px 70px #100b3c55}
+.ap h2{font-size:24px;margin:14px 0 4px}.ap>.muted{margin:0 0 14px}
+.tabs{display:flex;background:var(--lav);border-radius:12px;padding:4px}
+.tabs button{border:0;border-radius:9px;background:transparent;padding:10px;flex:1;color:var(--muted);font-weight:700}
+.tabs button.on{background:var(--card);color:var(--purple);box-shadow:var(--shadow)}
+.linkbtn{border:0;background:none;color:var(--purple);font-weight:700;padding:0}
+/* shell */
+.side{position:fixed;inset:0 auto 0 0;width:252px;background:linear-gradient(180deg,#211b54,#30256c);color:#fff;padding:18px 12px;display:flex;flex-direction:column;z-index:6;transition:transform .25s}
+.brand{display:flex;gap:11px;align-items:center;padding:6px 10px 16px;border-bottom:1px solid #ffffff22;margin-bottom:10px}
+.brand .logo{width:38px;height:38px;border-radius:11px;margin:0}.brand .logo .ic{width:21px;height:21px}
+.brand strong{display:block;font-size:14px;line-height:1.2}.brand small{opacity:.7;font-size:11px}
+.nav{display:grid;gap:3px;overflow:auto;align-content:start}
+.nav button,.lo{border:0;background:transparent;color:#e8e5ff;text-align:left;padding:10px 12px;border-radius:10px;display:flex;gap:11px;align-items:center;width:100%}
+.nav button:hover,.nav button.on{background:linear-gradient(110deg,#7443e8,#4c30bc);color:#fff}
+.nav .cnt{margin-left:auto;background:#ff9b3d;color:#2b1700;border-radius:20px;padding:0 7px;font-size:11px;font-weight:800}
+.lo{margin-top:auto}.lo:hover{background:#ffffff14}
+.main{margin-left:252px;min-height:100vh}
+.top{height:66px;background:var(--card);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:4}
+.top h1{font-size:18px;margin:0}.tl,.ta{display:flex;align-items:center;gap:10px}
+.who{display:flex;gap:9px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:4px 10px}
+.av{width:30px;height:30px;border-radius:50%;background:var(--lav);color:var(--purple);display:grid;place-items:center;font-weight:800}
+.ib{border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);padding:7px 9px;display:inline-flex;align-items:center}
+.hamb{display:none}
+.content{padding:22px 24px;max-width:1400px;margin:auto}
+/* controls */
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 14px}
+.toolbar label{display:flex;gap:6px;align-items:center}
+.fld{display:grid;gap:5px;margin:9px 0}.fld>label{font-weight:700;font-size:13px}
+.fld small{color:var(--muted)}
+input,select,textarea{border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:var(--card);outline:none;min-width:0}
+input:focus,select:focus,textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px #5b32c81f}
+input[type=checkbox]{width:auto;accent-color:var(--purple)}
+.btn{border:0;border-radius:10px;padding:9px 14px;font-weight:700;display:inline-flex;gap:7px;align-items:center;justify-content:center;white-space:nowrap}
+.btn.primary{background:linear-gradient(110deg,#7041df,#4e2abd);color:#fff}
+.btn.soft{background:var(--lav);color:var(--purple)}
+.btn.danger{background:#fdeceb;color:#a3261f}body.dark .btn.danger{background:#4a2530;color:#ffb3bb}
+.btn.green{background:#e4f5ea;color:var(--green)}body.dark .btn.green{background:#1f3a2b;color:#8be0ae}
+.btn.sm{padding:5px 8px;font-size:12px;border-radius:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.badge{display:inline-block;padding:3px 9px;border-radius:30px;background:var(--lav);color:var(--purple);font-size:12px;font-weight:700}
+.badge.red{background:#fdeceb;color:#a3261f}.badge.green{background:#e4f5ea;color:var(--green)}.badge.amber{background:#fff3d6;color:var(--amber)}
+body.dark .badge.red{background:#4a2530;color:#ffb3bb}body.dark .badge.green{background:#1f3a2b;color:#8be0ae}body.dark .badge.amber{background:#3b3320;color:#f1d98a}
+.notice{padding:11px 14px;border-radius:12px;margin-bottom:14px;display:flex;gap:10px;align-items:flex-start;background:#fff5d9;border:1px solid #f3dc98;color:#6b4e00}
+.notice.info{background:#eaf1ff;border-color:#c5d8ff;color:#173f7a}.notice.bad{background:#fdeceb;border-color:#f3b9b5;color:#8c1f19}
+body.dark .notice{background:#3b3320;border-color:#6d5a22;color:#f1d98a}body.dark .notice.info{background:#1d2c47;border-color:#34507f;color:#b9d2ff}
+.notice .btn{margin-left:auto}
+/* cards & tables */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:14px;margin-bottom:16px}
+.stat,.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.stat{padding:16px;display:grid;gap:6px}.stat .l{color:var(--muted);display:flex;gap:8px;align-items:center;font-size:13px}
+.stat b{font-size:20px;color:var(--ink);white-space:nowrap}.stat b.neg,.neg{color:var(--red)}.pos{color:var(--green)}
+.stat .ico{background:var(--lav);color:var(--purple);border-radius:10px;padding:6px;display:grid;place-items:center}
+.panel{padding:18px;margin-bottom:16px}.panel h2{font-size:15px;margin:0 0 12px;display:flex;gap:8px;align-items:center}
+.g2{display:grid;grid-template-columns:1.25fr 1fr;gap:16px}
+.accs{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.acc{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--bg)}.acc span{display:block;color:var(--muted);font-size:12px}.acc b{font-size:17px}
+.tw{overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:680px}
+th,td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;font-size:13px;vertical-align:middle}
+th{background:var(--lav);color:var(--ink);white-space:nowrap;font-size:12px;text-transform:uppercase;letter-spacing:.03em}
+tr:last-child td{border-bottom:0}
+td.act{white-space:nowrap;text-align:right}tr.void td{opacity:.55;text-decoration:line-through}tr.void td.act,tr.void td:has(.badge){text-decoration:none}
+tr.bold td{font-weight:800;background:var(--lav)}tr.foot td{font-weight:800;border-top:2px solid var(--line)}
+.empty{text-align:center;color:var(--muted);padding:28px!important}
+.pager{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding-top:12px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;color:var(--muted);font-size:12px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+.chart svg{width:100%;height:auto;display:block}
+.quick{display:flex;gap:9px;flex-wrap:wrap}
+.rtypes{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:14px}
+.rtype{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px;text-align:left;display:grid;gap:4px}
+.rtype .ic{color:var(--purple)}.rtype b{font-size:14px}.rtype span{color:var(--muted);font-size:12px}
+.rtype.on{border-color:var(--purple);box-shadow:0 0 0 3px #5b32c81f;background:var(--lav)}
+.sumcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.sumcards div{border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--bg)}.sumcards span{display:block;color:var(--muted);font-size:12px}.sumcards b{font-size:16px}
+.rep-head h3{margin:0 0 2px;font-size:18px}.rep-sec{margin:16px 0 6px;font-size:14px;font-weight:800;color:var(--ink)}
+.sign{display:flex;justify-content:space-around;margin-top:60px;gap:30px}.sign div{border-top:1px solid var(--text);padding-top:6px;min-width:170px;text-align:center;font-size:12px}
+pre.rules{background:#14142a;color:#e6e4ff;border-radius:12px;padding:14px;overflow:auto;font-size:12px;max-height:340px;margin:10px 0}
+/* modal & toast */
+.mb{position:fixed;inset:0;background:#16122a88;display:grid;place-items:center;z-index:30;padding:16px}
+.modal{background:var(--card);width:min(640px,100%);max-height:92vh;overflow:auto;border-radius:18px;padding:20px;box-shadow:0 25px 80px #120e3155}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}.mh h2{margin:0;font-size:18px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.s2{grid-column:1/-1}
+.ma{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
+#toasts{position:fixed;right:14px;bottom:14px;z-index:60}
+.toast{background:#24204e;color:#fff;padding:11px 15px;border-radius:11px;box-shadow:var(--shadow);margin-top:8px;max-width:380px}
+.toast.error{background:#a32b3a}.toast.success{background:#1e7a46}
+.accrow{display:grid;grid-template-columns:1fr 150px 70px;gap:8px;align-items:center;margin:6px 0}
+@media(max-width:1000px){.side{transform:translateX(-100%)}.side.open{transform:none}.main{margin-left:0}.hamb{display:inline-flex}.g2{grid-template-columns:1fr}}
+@media(max-width:720px){.auth{grid-template-columns:1fr;padding:18px}.ab{display:none}.ap{margin:auto;padding:24px}.top{padding:0 12px}.who span{display:none}.content{padding:14px}.fg{grid-template-columns:1fr}.s2{grid-column:auto}.accrow{grid-template-columns:1fr 110px 60px}}
+@media print{body *{visibility:hidden}#rep-print,#rep-print *{visibility:visible}#rep-print{position:absolute;left:0;top:0;width:100%;color:#000;background:#fff;padding:8mm}#rep-print table{min-width:0}.noprint{display:none!important}}
+</style>
+</head>
+<body>
+<div id="app"><div class="center-screen"><div class="spinner"></div><p>A iniciar o sistema…</p></div></div>
+<div id="toasts" aria-live="polite"></div>
+<script>
+/* Se o módulo principal não arrancar, mostra um diagnóstico em vez de um spinner infinito. */
+window.__startErr='';
+window.addEventListener('error',function(e){window.__startErr=e.message||'Erro de JavaScript'});
+window.addEventListener('unhandledrejection',function(e){window.__startErr=(e.reason&&e.reason.message)||String(e.reason||'')});
+setTimeout(function(){
+  if(window.__started)return;
+  var a=document.getElementById('app');
+  a.innerHTML='<div class="center-screen"><h2 style="color:#211b54">O sistema não iniciou</h2><p style="max-width:520px">'+(window.__startErr?('Erro: '+window.__startErr.replace(/</g,'&lt;')+'.'):'O navegador bloqueou o arranque.')+' Usa o Chrome ou o Edge actualizado, confirma que tens Internet e abre o ficheiro index.html a partir de uma pasta do computador (não de dentro do ZIP). Se o problema continuar, faz duplo clique em ABRIR-SISTEMA.bat.</p><button onclick="location.reload()" style="border:0;border-radius:10px;padding:10px 16px;background:#5b32c8;color:#fff;font-weight:700;cursor:pointer">Tentar novamente</button></div>';
+},12000);
+</script>
+<script type="module">
+'use strict';
+/* =====================================================================
+   CONFIGURAÇÃO FIREBASE (configuração pública do cliente, não é segredo)
+   ===================================================================== */
+const FIREBASE_CONFIG={
+  apiKey:"AIzaSyDGtLXx1lWB_Exeo_wJJg3WLIKRm4-3a68",
+  authDomain:"gestaofinanceira-150a7.firebaseapp.com",
+  projectId:"gestaofinanceira-150a7",
+  storageBucket:"gestaofinanceira-150a7.firebasestorage.app",
+  messagingSenderId:"247483964775",
+  appId:"1:247483964775:web:58cbb9a87055fda39123c2"
+};
+const FBV='10.14.1';
+
+/* =====================================================================
+   ÍCONES (SVG em linha)
+   ===================================================================== */
+const ICONS={
+ dashboard:'<rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/>',
+ tithes:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>',
+ offerings:'<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>',
+ expenses:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>',
+ cash:'<rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
+ members:'<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+ reports:'<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+ users:'<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/>',
+ audit:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+ settings:'<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',
+ logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>',
+ plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+ edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+ ban:'<circle cx="12" cy="12" r="10"/><line x1="4.9" y1="4.9" x2="19.1" y2="19.1"/>',
+ undo:'<polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>',
+ download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>',
+ upload:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>',
+ printer:'<polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
+ file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>',
+ search:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+ menu:'<line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>',
+ moon:'<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>',
+ sun:'<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>',
+ x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+ check:'<polyline points="20 6 9 17 4 12"/>',
+ alert:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+ lock:'<rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+ transfer:'<polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>',
+ up:'<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+ down:'<polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/>',
+ cross:'<line x1="12" y1="3" x2="12" y2="21"/><line x1="6.5" y1="8.5" x2="17.5" y2="8.5"/>',
+ copy:'<rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+ calendar:'<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+ mail:'<path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22,6 12,13 2,6"/>',
+ wallet:'<path d="M20 12V8H6a2 2 0 0 1 0-4h12v4"/><path d="M4 6v12a2 2 0 0 0 2 2h14v-4"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/>',
+ shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+ userx:'<path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="18" y1="8" x2="23" y2="13"/><line x1="23" y1="8" x2="18" y2="13"/>'
+};
+const ic=(n,c='')=>`<svg class="ic ${c}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]||''}</svg>`;
+
+/* =====================================================================
+   UTILITÁRIOS
+   ===================================================================== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad=(n,l=2)=>String(n).padStart(l,'0');
+const num=n=>{n=Number(n)||0;const neg=n<0&&Math.abs(n)>=0.005;const [i,d]=Math.abs(n).toFixed(2).split('.');return(neg?'-':'')+i.replace(/\B(?=(\d{3})+(?!\d))/g,' ')+','+d};
+const money=n=>num(n)+' MT';
+const fmt=d=>d?String(d).split('-').reverse().join('/'):'';
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+const addDays=(d,n)=>{const t=new Date(d+'T00:00:00Z');t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10)};
+const monthEnd=m=>{const y=+m.slice(0,4),mo=+m.slice(5,7);return y+'-'+pad(mo)+'-'+pad(new Date(Date.UTC(y,mo,0)).getUTCDate())};
+const MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const monthLabel=m=>m?MESES[+m.slice(5,7)-1]+' '+m.slice(0,4):'';
+const stamp=()=>{const d=new Date();return fmt(today())+' '+pad(d.getHours())+':'+pad(d.getMinutes())};
+const sum=a=>a.reduce((s,r)=>s+(Number(r.amount)||0),0);
+const parseAmount=v=>{const n=Number(String(v).replace(/\s/g,'').replace(',','.'));return Number.isFinite(n)?Math.round(n*100)/100:NaN};
+const clean=o=>JSON.parse(JSON.stringify(o));
+function toast(t,type='success'){const n=document.createElement('div');n.className='toast '+type;n.textContent=t;$('#toasts').append(n);setTimeout(()=>n.remove(),5000)}
+function downloadBlob(name,data,type){const a=document.createElement('a'),url=URL.createObjectURL(new Blob([data],{type}));a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000)}
+
+/* =====================================================================
+   GERADOR DE PDF (sem bibliotecas externas)
+   ===================================================================== */
+const CP1252={'—':0x97,'–':0x96,'’':0x92,'‘':0x91,'“':0x93,'”':0x94,'•':0x95,'…':0x85,'€':0x80};
+function pdfEnc(s){let o='';for(const ch of String(s).replace(/[\r\n\t]+/g,' ')){const c=ch.codePointAt(0);if(c<256&&!(c>=128&&c<160))o+=ch;else if(CP1252[ch])o+=String.fromCharCode(CP1252[ch]);else o+='?'}return o}
+const pdfEsc=s=>s.replace(/\\/g,'\\\\').replace(/\(/g,'\\(').replace(/\)/g,'\\)');
+const _cv=document.createElement('canvas').getContext('2d'),_wc={};
+function tw(s,size,bold){const k=(bold?'b':'n')+s;if(_wc[k]===undefined){_cv.font=(bold?'bold ':'')+'100px Arial, Helvetica, "Liberation Sans", sans-serif';_wc[k]=_cv.measureText(s).width/100}return _wc[k]*size}
+function wrap(s,w,size,bold){
+  const out=[];s=String(s??'');
+  for(const para of s.split('\n')){
+    let line='';
+    for(let word of para.split(' ')){
+      while(tw(word,size,bold)>w&&word.length>1){let k=word.length-1;while(k>1&&tw(word.slice(0,k),size,bold)>w)k--;if(line){out.push(line);line=''}out.push(word.slice(0,k));word=word.slice(k)}
+      const t=line?line+' '+word:word;
+      if(tw(t,size,bold)<=w||!line)line=t;else{out.push(line);line=word}
+    }
+    out.push(line);
+  }
+  return out;
+}
+class Pdf{
+  constructor(w=595.28,h=841.89){this.w=w;this.h=h;this.pages=[];this.newPage()}
+  newPage(){this.ops=[];this.pages.push(this.ops)}
+  rgb(hex){const n=parseInt(hex.slice(1),16);return[(n>>16&255)/255,(n>>8&255)/255,(n&255)/255].map(v=>v.toFixed(3)).join(' ')}
+  f(n){return(Math.round(n*100)/100).toString()}
+  rect(x,y,w,h,o={}){const{fill,stroke,lw=.6}=o;if(fill)this.ops.push(this.rgb(fill)+' rg');if(stroke){this.ops.push(this.rgb(stroke)+' RG');this.ops.push(lw+' w')}this.ops.push(`${this.f(x)} ${this.f(this.h-y-h)} ${this.f(w)} ${this.f(h)} re ${fill&&stroke?'B':fill?'f':'S'}`)}
+  line(x1,y1,x2,y2,color='#dcdff0',lw=.6){this.ops.push(`${this.rgb(color)} RG ${lw} w ${this.f(x1)} ${this.f(this.h-y1)} m ${this.f(x2)} ${this.f(this.h-y2)} l S`)}
+  text(x,y,s,o={}){const{size=10,bold=false,color='#171934',align='l'}=o;s=String(s??'');if(!s)return;const w=tw(s,size,bold);if(align==='r')x-=w;else if(align==='c')x-=w/2;this.ops.push(`${this.rgb(color)} rg BT /${bold?'F2':'F1'} ${size} Tf ${this.f(x)} ${this.f(this.h-y)} Td (${pdfEsc(pdfEnc(s))}) Tj ET`)}
+  bytes(title,footerFn){
+    const N=this.pages.length;this.pages.forEach((ops,i)=>{this.ops=ops;footerFn&&footerFn(this,i+1,N)});
+    const objs=[];const add=s=>{objs.push(s);return objs.length};
+    add('<< /Type /Catalog /Pages 2 0 R >>');
+    add('');
+    add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>');
+    add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
+    const d=new Date();
+    add(`<< /Title (${pdfEsc(pdfEnc(title))}) /Producer (Gestão Financeira da Igreja) /CreationDate (D:${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}) >>`);
+    const kids=[];
+    this.pages.forEach(ops=>{
+      const content=ops.join('\n');
+      const cid=add(`<< /Length ${content.length} >>\nstream\n${content}\nendstream`);
+      const pid=add(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${this.f(this.w)} ${this.f(this.h)}] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${cid} 0 R >>`);
+      kids.push(pid+' 0 R');
+    });
+    objs[1]=`<< /Type /Pages /Kids [${kids.join(' ')}] /Count ${kids.length} >>`;
+    let out='%PDF-1.4\n%\xE2\xE3\xCF\xD3\n';const offs=[];
+    objs.forEach((o,i)=>{offs.push(out.length);out+=`${i+1} 0 obj\n${o}\nendobj\n`});
+    const xr=out.length;
+    out+=`xref\n0 ${objs.length+1}\n0000000000 65535 f \n`+offs.map(o=>String(o).padStart(10,'0')+' 00000 n \n').join('');
+    out+=`trailer\n<< /Size ${objs.length+1} /Root 1 0 R /Info 5 0 R >>\nstartxref\n${xr}\n%%EOF`;
+    const u=new Uint8Array(out.length);for(let i=0;i<out.length;i++)u[i]=out.charCodeAt(i)&255;
+    return u;
+  }
+}
+const PC={ink:'#211b54',head:'#3b2a8f',purple:'#5b32c8',mut:'#6b6f8a',line:'#dcdff0',zebra:'#f6f5fd',red:'#b3261e',green:'#1e7a46',card:'#f4f2fd'};
+function pdfBand(P,cfg,rightText,h=78){
+  P.rect(0,0,P.w,h,{fill:PC.head});
+  P.rect(40,h/2-19,38,38,{fill:'#5f48b8'});
+  P.rect(40+17,h/2-12,4,24,{fill:'#ffffff'});P.rect(40+10,h/2-6,18,4,{fill:'#ffffff'});
+  P.text(90,h/2-3,cfg.churchName,{size:16,bold:true,color:'#ffffff'});
+  P.text(90,h/2+13,'Sistema de Gestão Financeira',{size:9,color:'#d9d2ff'});
+  if(rightText)P.text(P.w-40,h/2+4,rightText,{size:8.5,color:'#d9d2ff',align:'r'});
+}
+function pdfFooter(user){return(P,i,N)=>{P.line(40,P.h-36,P.w-40,P.h-36,PC.line);P.text(40,P.h-23,'Emitido por '+user+' em '+stamp(),{size:7.5,color:PC.mut});P.text(P.w-40,P.h-23,`Página ${i} de ${N}`,{size:7.5,color:PC.mut,align:'r'})}}
+function pdfReport(rep,cfg,user){
+  const P=new Pdf(),W=P.w,H=P.h,M=40,CW=W-2*M;
+  pdfBand(P,cfg,'Emitido em '+stamp());
+  let y=108;
+  P.text(M,y,rep.title,{size:18,bold:true,color:PC.ink});y+=18;
+  P.text(M,y,'Período: '+fmt(rep.from)+' a '+fmt(rep.to),{size:10,color:PC.mut});y+=22;
+  const newPage=()=>{P.newPage();P.text(M,26,cfg.churchName+'  ·  '+rep.title,{size:8.5,color:PC.mut});P.line(M,32,W-M,32);y=52};
+  if(rep.summary.length){
+    const n=Math.min(rep.summary.length,4),gap=10,bw=(CW-gap*(n-1))/n;
+    rep.summary.slice(0,4).forEach((s,i)=>{
+      const x=M+i*(bw+gap);
+      P.rect(x,y,bw,46,{fill:PC.card,stroke:PC.line});
+      P.rect(x,y,3,46,{fill:s.tone==='neg'?PC.red:s.tone==='pos'?PC.green:PC.purple});
+      P.text(x+12,y+17,s.l,{size:8,color:PC.mut});
+      P.text(x+12,y+36,s.v,{size:13,bold:true,color:s.tone==='neg'?PC.red:PC.ink});
+    });
+    y+=46+22;
+  }
+  rep.sections.forEach(sec=>{
+    const cols=sec.cols,tot=cols.reduce((s,c)=>s+c.w,0),cw=cols.map(c=>c.w/tot*CW),pd=5;
+    const drawHead=()=>{
+      P.rect(M,y,CW,20,{fill:PC.head});let x=M;
+      cols.forEach((c,i)=>{P.text(c.al==='r'?x+cw[i]-pd:x+pd,y+13.5,c.h,{size:7.8,bold:true,color:'#ffffff',align:c.al==='r'?'r':'l'});x+=cw[i]});
+      y+=20;
+    };
+    if(sec.title){if(y+60>H-60)newPage();P.text(M,y+4,sec.title,{size:11.5,bold:true,color:PC.ink});y+=14}
+    if(y+44>H-56)newPage();
+    drawHead();
+    const rows=[...sec.rows.map(r=>Array.isArray(r)?{c:r}:r)];
+    if(sec.foot)rows.push({c:sec.foot,foot:true});
+    if(!rows.length)rows.push({c:[sec.empty||'Sem registos no período seleccionado.',...cols.slice(1).map(()=>'')],empty:true});
+    rows.forEach((r,ri)=>{
+      const size=8.6,lh=11.2;
+      const lines=r.c.map((t,i)=>wrap(t,cw[i]-2*pd,size,!!(r.b||r.foot)));
+      const nl=Math.max(1,...lines.map(l=>l.length)),rh=nl*lh+8;
+      if(y+rh>H-52){newPage();drawHead()}
+      if(r.foot){P.rect(M,y,CW,rh,{fill:'#e9e5fb'});P.line(M,y,M+CW,y,PC.head,1)}
+      else if(r.b)P.rect(M,y,CW,rh,{fill:'#ece9fa'});
+      else if(ri%2===1)P.rect(M,y,CW,rh,{fill:PC.zebra});
+      let x=M;
+      lines.forEach((ls,i)=>{ls.forEach((t,li)=>P.text(cols[i].al==='r'?x+cw[i]-pd:x+pd,y+4+size*.85+li*lh,t,{size,bold:!!(r.b||r.foot),color:r.empty?PC.mut:(r.tone==='neg'?PC.red:PC.text||'#171934'),align:cols[i].al==='r'?'r':'l'}));x+=cw[i]});
+      P.line(M,y+rh,M+CW,y+rh,PC.line,.4);
+      y+=rh;
+    });
+    y+=18;
+  });
+  if(rep.notes&&rep.notes.length){if(y+30>H-56)newPage();rep.notes.forEach(n=>{wrap('Nota: '+n,CW,8,false).forEach(l=>{P.text(M,y,l,{size:8,color:PC.mut});y+=10.5});});y+=6}
+  if(rep.sign!==false){
+    if(y+90>H-50)newPage();
+    y+=44;P.line(M+20,y,M+185,y,PC.mut,.7);P.line(W-M-185,y,W-M-20,y,PC.mut,.7);
+    P.text(M+102,y+12,'Tesoureiro(a)',{size:8.5,color:PC.mut,align:'c'});P.text(W-M-102,y+12,'Pastor(a) Presidente',{size:8.5,color:PC.mut,align:'c'});
+  }
+  return P.bytes(rep.title,pdfFooter(user));
+}
+function pdfReceipt(doc,cfg,user){
+  const P=new Pdf(419.53,595.28),W=P.w,M=34,CW=W-2*M;
+  pdfBand(P,cfg,doc.kindLabel,70);
+  let y=104;
+  P.text(M,y,doc.title,{size:17,bold:true,color:PC.ink});
+  P.text(W-M,y,'Nº '+doc.number,{size:15,bold:true,color:PC.purple,align:'r'});y+=14;
+  P.line(M,y,W-M,y,PC.line);y+=24;
+  doc.rows.forEach(([l,v])=>{
+    P.text(M,y,l,{size:8.5,color:PC.mut});
+    const ls=wrap(v||'—',CW,11,false);ls.forEach((t,i)=>P.text(M,y+14+i*13,t,{size:11,color:'#171934'}));
+    y+=14+ls.length*13+10;
+  });
+  P.rect(M,y,CW,58,{fill:PC.card,stroke:PC.line});P.rect(M,y,4,58,{fill:PC.purple});
+  P.text(M+16,y+20,doc.amountLabel,{size:8.5,color:PC.mut});
+  P.text(M+16,y+45,money(doc.amount),{size:22,bold:true,color:PC.ink});
+  y+=58+60;
+  P.line(M+10,y,M+160,y,PC.mut,.7);P.line(W-M-160,y,W-M-10,y,PC.mut,.7);
+  P.text(M+85,y+12,doc.sig1,{size:8.5,color:PC.mut,align:'c'});P.text(W-M-85,y+12,doc.sig2,{size:8.5,color:PC.mut,align:'c'});
+  return P.bytes(doc.title+' '+doc.number,pdfFooter(user));
+}
+
+/* =====================================================================
+   REGRAS DO FIRESTORE (mostradas em Definições para copiar)
+   ===================================================================== */
+const RULES_TEXT=`rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signed() { return request.auth != null; }
+    function prof() { return get(/databases/$(database)/documents/users/$(request.auth.uid)).data; }
+    function approved() {
+      return signed()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && prof().status == 'approved' && prof().active == true;
+    }
+    function admin()  { return approved() && prof().role == 'admin'; }
+    function writer() { return approved() && prof().role in ['admin', 'treasurer']; }
+
+    function hasCfg() { return exists(/databases/$(database)/documents/settings/main); }
+    function cfg()    { return get(/databases/$(database)/documents/settings/main).data; }
+    function openDay(d) {
+      return admin() || !hasCfg() || !('closedThrough' in cfg())
+        || cfg().closedThrough == '' || d > cfg().closedThrough;
+    }
+    function afterStart(d) {
+      return !hasCfg() || !('openingDate' in cfg()) || cfg().openingDate == '' || d >= cfg().openingDate;
+    }
+    function validNew() {
+      let d = request.resource.data;
+      return writer() && d.amount is number && d.amount > 0 && d.status == 'active'
+        && openDay(d.date) && afterStart(d.date);
+    }
+    function validEdit() {
+      let d = request.resource.data;
+      return writer() && d.amount is number && d.amount > 0
+        && d.createdAt == resource.data.createdAt
+        && d.get('receiptNo', null) == resource.data.get('receiptNo', null)
+        && openDay(resource.data.date) && openDay(d.date) && afterStart(d.date);
+    }
+
+    match /meta/{id} {
+      allow get: if true;
+      allow create: if signed() && id == 'init'
+        && !exists(/databases/$(database)/documents/meta/init)
+        && request.resource.data.adminUid == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    match /users/{uid} {
+      allow get: if signed() && (request.auth.uid == uid || admin());
+      allow list: if admin();
+      allow create: if signed() && request.auth.uid == uid
+        && request.resource.data.uid == uid
+        && request.resource.data.keys().hasOnly(['uid','name','email','role','status','active','createdAt'])
+        && request.resource.data.active == true
+        && (
+          (request.resource.data.role == 'pending' && request.resource.data.status == 'pending')
+          || (request.resource.data.role == 'admin' && request.resource.data.status == 'approved'
+              && !exists(/databases/$(database)/documents/meta/init)
+              && getAfter(/databases/$(database)/documents/meta/init).data.adminUid == uid)
+        );
+      allow update: if admin() && uid != request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role','status','active','updatedAt']);
+      allow delete: if false;
+    }
+
+    match /settings/{id} {
+      allow read: if approved();
+      allow create, update: if admin();
+      allow delete: if false;
+    }
+
+    match /counters/{id} {
+      allow read: if writer();
+      allow create: if writer() && request.resource.data.n == 1;
+      allow update: if writer() && request.resource.data.n == resource.data.n + 1;
+      allow delete: if false;
+    }
+
+    match /tithes/{id} {
+      allow read: if approved();
+      allow create: if validNew();
+      allow update: if validEdit();
+      allow delete: if false;
+    }
+    match /offerings/{id} {
+      allow read: if approved();
+      allow create: if validNew();
+      allow update: if validEdit();
+      allow delete: if false;
+    }
+    match /expenses/{id} {
+      allow read: if approved();
+      allow create: if validNew();
+      allow update: if validEdit();
+      allow delete: if false;
+    }
+    match /transfers/{id} {
+      allow read: if approved();
+      allow create: if validNew();
+      allow update: if validEdit();
+      allow delete: if false;
+    }
+
+    match /members/{id} {
+      allow read: if approved();
+      allow create, update: if writer();
+      allow delete: if admin();
+    }
+
+    match /auditLogs/{id} {
+      allow read: if admin();
+      allow create: if writer() && request.resource.data.actorUid == request.auth.uid;
+      allow update, delete: if false;
+    }
+  }
+}`;
+
+/* =====================================================================
+   CAMADA DE DADOS: Firebase (real) e Demonstração (em memória)
+   ===================================================================== */
+const NUMBERED=['tithes','offerings','expenses'];
+function makeFirebase(){
+  const B={
+    async init(){
+      const base=`https://www.gstatic.com/firebasejs/${FBV}/`;
+      const [A,Au,F]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
+      B.Au=Au;B.F=F;
+      const app=A.initializeApp(FIREBASE_CONFIG);
+      B.auth=Au.getAuth(app);
+      B.db=F.initializeFirestore(app,{experimentalAutoDetectLongPolling:true});
+    },
+    onAuth(cb){return B.Au.onAuthStateChanged(B.auth,u=>cb(u?{uid:u.uid,email:u.email}:null))},
+    async getInit(){try{return(await B.F.getDoc(B.F.doc(B.db,'meta','init'))).exists()}catch(e){console.warn(e);return null}},
+    async signUp(name,email,pw){const c=await B.Au.createUserWithEmailAndPassword(B.auth,email,pw);try{await B.Au.updateProfile(c.user,{displayName:name})}catch(e){}return c.user.uid},
+    async createProfile(p,bootstrap){
+      const{F,db}=B;
+      if(bootstrap){const b=F.writeBatch(db);b.set(F.doc(db,'meta','init'),{adminUid:p.uid,createdAt:p.createdAt});b.set(F.doc(db,'users',p.uid),p);await b.commit()}
+      else await F.setDoc(F.doc(db,'users',p.uid),p);
+    },
+    async signIn(email,pw,remember){await B.Au.setPersistence(B.auth,remember?B.Au.browserLocalPersistence:B.Au.browserSessionPersistence);await B.Au.signInWithEmailAndPassword(B.auth,email,pw)},
+    signOut(){return B.Au.signOut(B.auth)},
+    resetPw(email){return B.Au.sendPasswordResetEmail(B.auth,email)},
+    async getProfile(uid){const s=await B.F.getDoc(B.F.doc(B.db,'users',uid));return s.exists()?{uid,...s.data()}:null},
+    listen(name,cb,err){
+      const{F,db}=B;
+      if(name==='settings')return F.onSnapshot(F.doc(db,'settings','main'),s=>cb(s.exists()?s.data():null),err);
+      let q=F.collection(db,name);if(name==='auditLogs')q=F.query(q,F.orderBy('createdAt','desc'),F.limit(500));
+      return F.onSnapshot(q,s=>cb(s.docs.map(d=>({id:d.id,...d.data()}))),err);
+    },
+    async create(coll,data,audit){
+      const{F,db}=B,ref=F.doc(F.collection(db,coll)),aref=F.doc(F.collection(db,'auditLogs')),numbered=NUMBERED.includes(coll);
+      await F.runTransaction(db,async tx=>{
+        let n=null;
+        if(numbered){const cref=F.doc(db,'counters',coll),c=await tx.get(cref);n=(c.exists()?c.data().n:0)+1;tx.set(cref,{n})}
+        tx.set(ref,clean({...data,...(numbered?{receiptNo:n}:{})}));
+        tx.set(aref,clean({...audit,documentId:ref.id}));
+      });
+      return ref.id;
+    },
+    async update(coll,id,patch,audit){const{F,db}=B,b=F.writeBatch(db);b.update(F.doc(db,coll,id),clean(patch));b.set(F.doc(F.collection(db,'auditLogs')),clean({...audit,documentId:id}));await b.commit()},
+    async setSettings(patch,audit){const{F,db}=B,b=F.writeBatch(db);b.set(F.doc(db,'settings','main'),clean(patch),{merge:true});b.set(F.doc(F.collection(db,'auditLogs')),clean({...audit,documentId:'main'}));await b.commit()},
+    async createMany(coll,arr,audit){
+      const{F,db}=B;
+      for(let i=0;i<arr.length;i+=400){const b=F.writeBatch(db);arr.slice(i,i+400).forEach(d=>b.set(F.doc(F.collection(db,coll)),clean(d)));if(i===0)b.set(F.doc(F.collection(db,'auditLogs')),clean({...audit,documentId:'-'}));await b.commit()}
+    },
+    async updateUser(uid,patch,audit){const{F,db}=B,b=F.writeBatch(db);b.update(F.doc(db,'users',uid),clean(patch));b.set(F.doc(F.collection(db,'auditLogs')),clean({...audit,documentId:uid}));await b.commit()}
+  };
+  return B;
+}
+function makeDemo(){
+  const st={auth:[],profiles:{},init:false,settings:null,cols:{tithes:[],offerings:[],expenses:[],transfers:[],members:[],auditLogs:[]},counters:{}};
+  let cur=null,authCb=null,seq=0;const subs={};
+  const notify=n=>(subs[n]||[]).forEach(f=>f());
+  const rid=()=>'d'+(++seq);
+  const B={demo:true,
+    async init(){},
+    onAuth(cb){authCb=cb;setTimeout(()=>cb(cur),0);return()=>{}},
+    async getInit(){return st.init},
+    async signUp(name,email,pw){if(st.auth.some(a=>a.email===email)){const e=new Error('x');e.code='auth/email-already-in-use';throw e}if(pw.length<6){const e=new Error('x');e.code='auth/weak-password';throw e}const u={uid:rid(),email,pw};st.auth.push(u);cur={uid:u.uid,email};return u.uid},
+    async createProfile(p,boot){if(boot){st.init=true}st.profiles[p.uid]={...p};notify('users')},
+    async signIn(email,pw){const u=st.auth.find(a=>a.email===email&&a.pw===pw);if(!u){const e=new Error('x');e.code='auth/invalid-credential';throw e}cur={uid:u.uid,email};authCb&&authCb(cur)},
+    async signOut(){cur=null;authCb&&authCb(null)},
+    async resetPw(){},
+    async getProfile(uid){return st.profiles[uid]?{...st.profiles[uid]}:null},
+    listen(name,cb){
+      const f=()=>cb(name==='settings'?(st.settings?clean(st.settings):null):name==='users'?Object.values(st.profiles).map(p=>({id:p.uid,...p})):name==='auditLogs'?[...st.cols.auditLogs].sort((a,b)=>b.createdAt.localeCompare(a.createdAt)).map(clean):st.cols[name].map(clean));
+      (subs[name]||(subs[name]=[])).push(f);setTimeout(f,0);return()=>{subs[name]=subs[name].filter(x=>x!==f)};
+    },
+    async create(coll,data,audit){const id=rid(),r={id,...clean(data)};if(NUMBERED.includes(coll)){st.counters[coll]=(st.counters[coll]||0)+1;r.receiptNo=st.counters[coll]}st.cols[coll].push(r);st.cols.auditLogs.push({id:rid(),...clean(audit),documentId:id});notify(coll);notify('auditLogs');return id},
+    async update(coll,id,patch,audit){const r=st.cols[coll].find(x=>x.id===id);Object.assign(r,clean(patch));st.cols.auditLogs.push({id:rid(),...clean(audit),documentId:id});notify(coll);notify('auditLogs')},
+    async setSettings(patch,audit){st.settings={...(st.settings||{}),...clean(patch)};st.cols.auditLogs.push({id:rid(),...clean(audit),documentId:'main'});notify('settings');notify('auditLogs')},
+    async createMany(coll,arr,audit){arr.forEach(d=>st.cols[coll].push({id:rid(),...clean(d)}));st.cols.auditLogs.push({id:rid(),...clean(audit),documentId:'-'});notify(coll);notify('auditLogs')},
+    async updateUser(uid,patch,audit){Object.assign(st.profiles[uid],clean(patch));st.cols.auditLogs.push({id:rid(),...clean(audit),documentId:uid});notify('users');notify('auditLogs')}
+  };
+  return B;
+}
+
+/* =====================================================================
+   ESTADO, CONFIGURAÇÃO E CÁLCULO DE SALDOS
+   ===================================================================== */
+let B=null;
+const S={user:null,page:'dashboard',menu:false,q:'',from:'',to:'',pg:1,showVoid:false,rep:null,repKind:'general',ready:false,registering:false,initDone:null};
+const D={tithes:[],offerings:[],expenses:[],transfers:[],members:[],users:[],auditLogs:[],cfg:null,loaded:{}};
+const DEF_CFG={churchName:'Igreja Evangélica',openingDate:'',closedThrough:'',lastBackup:'',
+ accounts:[{id:'cash',name:'Numerário (caixa)',opening:0,active:true},{id:'mpesa',name:'M-Pesa',opening:0,active:true},{id:'emola',name:'e-Mola',opening:0,active:true},{id:'bank',name:'Conta bancária',opening:0,active:true}],
+ expenseCats:['Água e electricidade','Renda','Salários e subsídios','Manutenção','Material de escritório','Transporte','Acção social','Eventos e actividades','Missões','Outras'],
+ offeringTypes:['Oferta de culto','Oferta especial','Oferta missionária','Oferta de construção','Acção de graças','Outras']};
+const cfg=()=>({...DEF_CFG,...(D.cfg||{})});
+const roleName={admin:'Administrador',treasurer:'Tesoureiro',consultant:'Consultor',pending:'Pendente'};
+const isAdmin=()=>S.user&&S.user.role==='admin';
+const canWrite=()=>S.user&&['admin','treasurer'].includes(S.user.role);
+const live=a=>a.filter(r=>r.status!=='voided');
+const accName=id=>{const a=cfg().accounts.find(x=>x.id===id);return a?a.name:'—'};
+const activeAccs=()=>cfg().accounts.filter(a=>a.active!==false);
+const recNo=(coll,n)=>n?({tithes:'D-',offerings:'O-',expenses:'P-'}[coll]||'')+pad(n,4):'—';
+const isClosed=d=>{const c=cfg().closedThrough;return !!c&&d<=c};
+const lockedFor=d=>isClosed(d)&&!isAdmin();
+function movements(){
+  const m=[];
+  live(D.tithes).forEach(r=>m.push({d:r.date,a:r.accountId,v:+r.amount,k:'in'}));
+  live(D.offerings).forEach(r=>m.push({d:r.date,a:r.accountId,v:+r.amount,k:'in'}));
+  live(D.expenses).forEach(r=>m.push({d:r.date,a:r.accountId,v:-r.amount,k:'out'}));
+  live(D.transfers).forEach(r=>{m.push({d:r.date,a:r.from,v:-r.amount,k:'tout'});m.push({d:r.date,a:r.to,v:+r.amount,k:'tin'})});
+  return m;
+}
+function balance(accId,end){
+  const c=cfg(),acc=c.accounts.find(x=>x.id===accId);let b=acc?(Number(acc.opening)||0):0;
+  for(const m of movements())if(m.a===accId&&m.d>=c.openingDate&&m.d<=end)b+=m.v;
+  return Math.round(b*100)/100;
+}
+const totalBalance=end=>Math.round(cfg().accounts.reduce((s,a)=>s+balance(a.id,end),0)*100)/100;
+
+/* =====================================================================
+   RELATÓRIOS (dados estruturados -> HTML, PDF e CSV)
+   ===================================================================== */
+const REPS={
+ general:{t:'Relatório geral consolidado',i:'reports',d:'Saldo anterior, entradas, despesas e saldo final'},
+ tithes:{t:'Relatório de dízimos',i:'tithes',d:'Todos os dízimos do período'},
+ offerings:{t:'Relatório de ofertas',i:'offerings',d:'Ofertas por tipo e por data'},
+ expenses:{t:'Relatório de despesas',i:'expenses',d:'Despesas por categoria e por data'},
+ tithers:{t:'Lista de dizimistas e valores',i:'members',d:'Quanto cada membro contribuiu'},
+ missing:{t:'Dízimos em falta',i:'alert',d:'Membros activos sem dízimo nos meses do período'},
+ annual:{t:'Relatório anual comparativo',i:'up',d:'Mês a mês, comparado com o ano anterior'}
+};
+const sortAsc=a=>[...a].sort((x,y)=>x.date.localeCompare(y.date)||(x.receiptNo||0)-(y.receiptNo||0));
+const byName=(a,b)=>a.name.localeCompare(b.name,'pt');
+const memberOf=(t,ms)=>ms.find(m=>m.id&&m.id===t.memberId)||ms.find(m=>String(m.name).toLowerCase()===String(t.person).toLowerCase());
+function monthsBetween(from,to){const out=[];let m=from.slice(0,7);while(m<=to.slice(0,7)&&out.length<24){out.push(m);const y=+m.slice(0,4),mo=+m.slice(5,7);m=mo===12?(y+1)+'-01':y+'-'+pad(mo+1)}return out}
+function groupSum(list,key){const g={};list.forEach(r=>{const k=r[key]||'Sem categoria';(g[k]=g[k]||{n:0,t:0});g[k].n++;g[k].t+=Number(r.amount)||0});return Object.entries(g).sort((a,b)=>a[0].localeCompare(b[0],'pt'))}
+function reportData(kind,from,to){
+  const c=cfg(),notes=[],open=c.openingDate;
+  if(kind==='annual'){const y=(from||to||today()).slice(0,4);from=y+'-01-01';to=y+'-12-31'}
+  if(!from)from=open||today().slice(0,8)+'01';
+  if(!to)to=today();
+  if(open&&from<open&&kind!=='annual'){from=open;notes.push('O período foi ajustado à data de arranque do sistema ('+fmt(open)+').')}
+  if(to<from)throw Error('A data final não pode ser anterior à data inicial.');
+  const inP=r=>r.date>=from&&r.date<=to;
+  const T=sortAsc(live(D.tithes).filter(inP)),O=sortAsc(live(D.offerings).filter(inP)),E=sortAsc(live(D.expenses).filter(inP));
+  const rep={kind,title:REPS[kind].t,from,to,notes,summary:[],sections:[]};
+  if(kind==='tithes'){
+    const tot=sum(T),pers=new Set(T.map(t=>String(t.person).toLowerCase())).size;
+    rep.summary=[{l:'Total de dízimos',v:money(tot),tone:'pos'},{l:'Nº de lançamentos',v:String(T.length)},{l:'Dizimistas',v:String(pers)},{l:'Média por lançamento',v:money(T.length?tot/T.length:0)}];
+    rep.sections=[{cols:[{h:'Recibo',w:.1},{h:'Data',w:.12},{h:'Dizimista',w:.27},{h:'Mês ref.',w:.15},{h:'Conta',w:.18},{h:'Valor (MT)',w:.18,al:'r'}],rows:T.map(t=>[recNo('tithes',t.receiptNo),fmt(t.date),t.person,monthLabel(t.ref),accName(t.accountId),num(t.amount)]),foot:['','','Total','','',num(tot)]}];
+  }else if(kind==='offerings'){
+    const tot=sum(O);
+    rep.summary=[{l:'Total de ofertas',v:money(tot),tone:'pos'},{l:'Nº de lançamentos',v:String(O.length)},{l:'Tipos de oferta',v:String(new Set(O.map(o=>o.type)).size)},{l:'Média por lançamento',v:money(O.length?tot/O.length:0)}];
+    rep.sections=[{title:'Lançamentos',cols:[{h:'Recibo',w:.1},{h:'Data',w:.12},{h:'Tipo',w:.2},{h:'Descrição',w:.23},{h:'Conta',w:.17},{h:'Valor (MT)',w:.18,al:'r'}],rows:O.map(o=>[recNo('offerings',o.receiptNo),fmt(o.date),o.type,o.desc,accName(o.accountId),num(o.amount)]),foot:['','','','','Total',num(tot)]},
+      {title:'Resumo por tipo de oferta',cols:[{h:'Tipo',w:.5},{h:'Nº',w:.15,al:'r'},{h:'Total (MT)',w:.35,al:'r'}],rows:groupSum(O,'type').map(([k,v])=>[k,String(v.n),num(v.t)]),foot:['Total',String(O.length),num(tot)]}];
+  }else if(kind==='expenses'){
+    const tot=sum(E);
+    rep.summary=[{l:'Total de despesas',v:money(tot),tone:'neg'},{l:'Nº de lançamentos',v:String(E.length)},{l:'Categorias',v:String(new Set(E.map(e=>e.category)).size)},{l:'Média por lançamento',v:money(E.length?tot/E.length:0)}];
+    rep.sections=[{title:'Lançamentos',cols:[{h:'Nº',w:.08},{h:'Data',w:.11},{h:'Categoria',w:.17},{h:'Descrição',w:.22},{h:'Responsável',w:.14},{h:'Conta',w:.12},{h:'Valor (MT)',w:.16,al:'r'}],rows:E.map(e=>[recNo('expenses',e.receiptNo),fmt(e.date),e.category,e.desc,e.resp,accName(e.accountId),num(e.amount)]),foot:['','','','','','Total',num(tot)]},
+      {title:'Resumo por categoria',cols:[{h:'Categoria',w:.5},{h:'Nº',w:.15,al:'r'},{h:'Total (MT)',w:.35,al:'r'}],rows:groupSum(E,'category').map(([k,v])=>[k,String(v.n),num(v.t)]),foot:['Total',String(E.length),num(tot)]}];
+  }else if(kind==='general'){
+    const prev=totalBalance(addDays(from,-1)),tin=sum(T),oin=sum(O),exp=sum(E),res=tin+oin-exp,end=Math.round((prev+res)*100)/100;
+    rep.summary=[{l:'Saldo anterior',v:money(prev)},{l:'Total de entradas',v:money(tin+oin),tone:'pos'},{l:'Total de despesas',v:money(exp),tone:'neg'},{l:'Saldo final',v:money(end),tone:end<0?'neg':'pos'}];
+    const rows=[{c:['Saldo anterior (transitado)','',num(prev)],b:1},{c:['Dízimos',String(T.length),num(tin)]}];
+    groupSum(O,'type').forEach(([k,v])=>rows.push({c:['Ofertas · '+k,String(v.n),num(v.t)]}));
+    rows.push({c:['Total de entradas',String(T.length+O.length),num(tin+oin)],b:1});
+    groupSum(E,'category').forEach(([k,v])=>rows.push({c:['Despesas · '+k,String(v.n),num(v.t)]}));
+    rows.push({c:['Total de despesas',String(E.length),num(exp)],b:1});
+    rows.push({c:['Resultado do período (entradas - despesas)','',num(res)],b:1,tone:res<0?'neg':''});
+    rows.push({c:['Saldo final','',num(end)],b:1,tone:end<0?'neg':''});
+    const acc=c.accounts.map(a=>{const p=balance(a.id,addDays(from,-1)),mv=movements().filter(m=>m.a===a.id&&m.d>=from&&m.d<=to);
+      const i=mv.filter(m=>m.k==='in').reduce((s,m)=>s+m.v,0),o=-mv.filter(m=>m.k==='out').reduce((s,m)=>s+m.v,0),t=mv.filter(m=>m.k==='tin'||m.k==='tout').reduce((s,m)=>s+m.v,0);
+      return {a,p,i,o,t,e:Math.round((p+i-o+t)*100)/100}});
+    const ts=k=>acc.reduce((s,x)=>s+x[k],0);
+    rep.sections=[{title:'Resumo do período',cols:[{h:'Descrição',w:.62},{h:'Qtd.',w:.12,al:'r'},{h:'Valor (MT)',w:.26,al:'r'}],rows},
+      {title:'Saldos por conta',cols:[{h:'Conta',w:.22},{h:'Saldo anterior',w:.16,al:'r'},{h:'Entradas',w:.15,al:'r'},{h:'Despesas',w:.15,al:'r'},{h:'Transferências',w:.16,al:'r'},{h:'Saldo final',w:.16,al:'r'}],rows:acc.map(x=>[x.a.name+(x.a.active===false?' (inactiva)':''),num(x.p),num(x.i),num(x.o),num(x.t),num(x.e)]),foot:['Total',num(ts('p')),num(ts('i')),num(ts('o')),num(ts('t')),num(ts('e'))]}];
+    if(Math.abs(end-totalBalance(to))>0.005)rep.notes.push('Existem movimentos com data posterior ao fim do período; o saldo final é o do último dia do período.');
+  }else if(kind==='tithers'){
+    const ms=D.members,rows=[],used=new Set();
+    ms.slice().sort(byName).forEach(m=>{const t=T.filter(x=>memberOf(x,ms)===m);t.forEach(x=>used.add(x.id));
+      if(!t.length&&m.status==='inactive')return;
+      const last=t.map(x=>x.ref).sort().pop();rows.push([m.name,m.contact||'—',String(t.length),last?monthLabel(last):'—',num(sum(t))])});
+    const g={};T.filter(x=>!used.has(x.id)).forEach(x=>{const k=String(x.person).trim();(g[k]=g[k]||[]).push(x)});
+    Object.keys(g).sort((a,b)=>a.localeCompare(b,'pt')).forEach(k=>{const t=g[k];rows.push([k+' (sem cadastro)','—',String(t.length),monthLabel(t.map(x=>x.ref).sort().pop()),num(sum(t))])});
+    const tot=sum(T),withT=rows.filter(r=>r[2]!=='0').length;
+    rep.summary=[{l:'Total de dízimos',v:money(tot),tone:'pos'},{l:'Dizimistas com dízimo',v:String(withT)},{l:'Membros sem dízimo',v:String(rows.length-withT)},{l:'Lançamentos',v:String(T.length)}];
+    rep.sections=[{title:'Dizimistas e valores',cols:[{h:'Nome',w:.32},{h:'Contacto',w:.18},{h:'Lanç.',w:.1,al:'r'},{h:'Último mês ref.',w:.2},{h:'Total (MT)',w:.2,al:'r'}],rows:rows,foot:['Total','','','',num(tot)]}];
+  }else if(kind==='missing'){
+    const months=monthsBetween(from,to),ms=D.members.filter(m=>m.status!=='inactive').sort(byName),rows=[],allT=live(D.tithes).filter(x=>months.includes(x.ref));
+    ms.forEach(m=>{const miss=months.filter(mo=>!allT.some(x=>x.ref===mo&&memberOf(x,D.members)===m));
+      if(miss.length)rows.push([m.name,m.contact||'—',String(miss.length)+' de '+months.length,miss.map(monthLabel).join(', ')])});
+    rep.summary=[{l:'Membros activos',v:String(ms.length)},{l:'Meses analisados',v:String(months.length)},{l:'Membros com falta',v:String(rows.length),tone:rows.length?'neg':'pos'}];
+    rep.sections=[{title:'Membros activos sem dízimo registado',empty:'Todos os membros activos têm dízimo registado nos meses analisados.',cols:[{h:'Nome',w:.28},{h:'Contacto',w:.17},{h:'Meses em falta',w:.15},{h:'Quais',w:.4}],rows}];
+    if(months.length>=24)rep.notes.push('Foram analisados no máximo 24 meses.');
+  }else if(kind==='annual'){
+    const y=+from.slice(0,4),py=y-1,rows=[];let a1=0,a0=0,d1=0,d0=0;
+    const mon=(yr,mo)=>{const p=yr+'-'+pad(mo);const i=sum(live(D.tithes).filter(r=>r.date.startsWith(p)))+sum(live(D.offerings).filter(r=>r.date.startsWith(p)));const o=sum(live(D.expenses).filter(r=>r.date.startsWith(p)));return{i,o}};
+    for(let mo=1;mo<=12;mo++){const a=mon(y,mo),b=mon(py,mo);a1+=a.i;a0+=b.i;d1+=a.o;d0+=b.o;
+      const bal=(open&&monthEnd(y+'-'+pad(mo))<open)?'—':num(totalBalance(monthEnd(y+'-'+pad(mo))));
+      rows.push([MESES[mo-1],num(a.i),num(b.i),num(a.o),num(b.o),num(a.i-a.o),bal])}
+    rep.summary=[{l:'Entradas '+y,v:money(a1),tone:'pos'},{l:'Despesas '+y,v:money(d1),tone:'neg'},{l:'Resultado '+y,v:money(a1-d1),tone:a1-d1<0?'neg':'pos'},{l:'Entradas '+py,v:money(a0)}];
+    rep.title='Relatório anual comparativo '+y;
+    rep.sections=[{title:'Mês a mês · '+y+' contra '+py,cols:[{h:'Mês',w:.14},{h:'Entradas '+y,w:.14,al:'r'},{h:'Entradas '+py,w:.14,al:'r'},{h:'Despesas '+y,w:.14,al:'r'},{h:'Despesas '+py,w:.14,al:'r'},{h:'Resultado '+y,w:.15,al:'r'},{h:'Saldo no fim',w:.15,al:'r'}],rows,foot:['Total',num(a1),num(a0),num(d1),num(d0),num(a1-d1),'']}];
+    rep.notes.push('O saldo no fim do mês só existe a partir da data de arranque do sistema.');
+  }
+  return rep;
+}
+function reportHtml(rep){
+  const cellCls=(c)=>c.al==='r'?' class="right nowrap"':'';
+  return `<div class="rep-head"><h3>${esc(cfg().churchName)}</h3><div class="muted">Sistema de Gestão Financeira</div><h3 style="margin-top:12px">${esc(rep.title)}</h3><div>Período: ${fmt(rep.from)} a ${fmt(rep.to)}</div><div class="muted">Emitido em ${stamp()} por ${esc(S.user.name)}</div></div>
+  ${rep.summary.length?`<div class="sumcards">${rep.summary.map(s=>`<div><span>${esc(s.l)}</span><b class="${s.tone==='neg'?'neg':s.tone==='pos'?'pos':''}">${esc(s.v)}</b></div>`).join('')}</div>`:''}
+  ${rep.sections.map(sec=>{const rows=sec.rows.map(r=>Array.isArray(r)?{c:r}:r);return `${sec.title?`<div class="rep-sec">${esc(sec.title)}</div>`:''}<div class="tw"><table style="min-width:0"><thead><tr>${sec.cols.map(c=>`<th${cellCls(c)}>${esc(c.h)}</th>`).join('')}</tr></thead><tbody>${rows.length?rows.map(r=>`<tr class="${r.b?'bold':''}">${r.c.map((x,i)=>`<td${cellCls(sec.cols[i])}>${esc(x)}</td>`).join('')}</tr>`).join(''):`<tr><td class="empty" colspan="${sec.cols.length}">${esc(sec.empty||'Sem registos no período seleccionado.')}</td></tr>`}${sec.foot?`<tr class="foot">${sec.foot.map((x,i)=>`<td${cellCls(sec.cols[i])}>${esc(x)}</td>`).join('')}</tr>`:''}</tbody></table></div>`}).join('')}
+  ${rep.notes.map(n=>`<p class="muted" style="font-size:12px">Nota: ${esc(n)}</p>`).join('')}
+  <div class="sign"><div>Tesoureiro(a)</div><div>Pastor(a) Presidente</div></div>`;
+}
+function reportCsv(rep){
+  const q=v=>'"'+String(v).replace(/"/g,'""')+'"';const L=[q(cfg().churchName),q(rep.title),q('Período: '+fmt(rep.from)+' a '+fmt(rep.to)),''];
+  rep.summary.forEach(s=>L.push([q(s.l),q(s.v)].join(';')));if(rep.summary.length)L.push('');
+  rep.sections.forEach(sec=>{if(sec.title)L.push(q(sec.title));L.push(sec.cols.map(c=>q(c.h)).join(';'));sec.rows.map(r=>Array.isArray(r)?r:r.c).forEach(r=>L.push(r.map(q).join(';')));if(sec.foot)L.push(sec.foot.map(q).join(';'));L.push('')});
+  return '﻿'+L.join('\r\n');
+}
+
+/* =====================================================================
+   COMPONENTES DE INTERFACE
+   ===================================================================== */
+const fld=(label,name,type,val,req,extra='',hint='')=>`<div class="fld"><label>${label}</label><input name="${name}" type="${type}" value="${esc(val)}" ${req?'required':''} ${extra}>${hint?`<small>${hint}</small>`:''}</div>`;
+const sel=(label,name,opts,val,req=1)=>`<div class="fld"><label>${label}</label><select name="${name}" ${req?'required':''}>${opts.map(o=>`<option value="${esc(o.v)}" ${String(o.v)===String(val)?'selected':''}>${esc(o.l)}</option>`).join('')}</select></div>`;
+const area=(label,name,val,cls='s2')=>`<div class="fld ${cls}"><label>${label}</label><textarea name="${name}" rows="3">${esc(val)}</textarea></div>`;
+const silent=()=>Object.assign(new Error('cancelado'),{silent:true});
+const aud=(op,areaName,desc)=>({actorUid:S.user.uid,actorName:S.user.name,op,area:areaName,desc:desc||'',createdAt:new Date().toISOString()});
+function errorText(e){
+  const c=e&&e.code||'';
+  if(/invalid-credential|user-not-found|wrong-password|invalid-login/.test(c))return 'E-mail ou palavra-passe incorrectos.';
+  if(c.includes('email-already-in-use'))return 'Este e-mail já tem uma conta.';
+  if(c.includes('weak-password'))return 'A palavra-passe deve ter pelo menos 6 caracteres.';
+  if(c.includes('invalid-email'))return 'E-mail inválido.';
+  if(c.includes('too-many-requests'))return 'Demasiadas tentativas. Aguarda uns minutos e tenta de novo.';
+  if(c.includes('network')||c.includes('unavailable'))return 'Sem ligação ao Firebase. Verifica a Internet.';
+  if(c.includes('operation-not-allowed')||c.includes('configuration-not-found'))return 'O início de sessão por e-mail ainda não está activado no Firebase (Authentication > Sign-in method).';
+  if(c.includes('operation-not-supported'))return 'Este modo de abertura não é suportado pelo Firebase. Abre o sistema com o ABRIR-SISTEMA.bat.';
+  if(c.includes('permission-denied'))return 'Permissão negada. Confirma a aprovação da conta e se as regras do Firestore foram publicadas.';
+  return(e&&e.message)||'Ocorreu um erro.';
+}
+function modal(title,body,onSave,label='Guardar'){
+  const el=document.createElement('div');el.className='mb';
+  el.innerHTML=`<div class="modal" role="dialog" aria-modal="true"><div class="mh"><h2>${esc(title)}</h2><button class="ib" type="button" data-close aria-label="Fechar">${ic('x')}</button></div><form>${body}<div class="ma"><button type="button" class="btn soft" data-close>${onSave?'Cancelar':'Fechar'}</button>${onSave?`<button class="btn primary">${esc(label)}</button>`:''}</div></form></div>`;
+  document.body.append(el);
+  el.addEventListener('click',e=>{if(e.target===el||e.target.closest('[data-close]'))el.remove()});
+  el.querySelector('form').onsubmit=async e=>{
+    e.preventDefault();if(!onSave)return;const b=e.submitter;if(b)b.disabled=true;
+    try{await onSave(new FormData(e.target));el.remove();scheduleRender(true)}
+    catch(err){if(!err.silent)toast(errorText(err),'error');if(b)b.disabled=false}
+  };
+  const f=el.querySelector('input:not([type=hidden]),select,textarea');if(f)f.focus();
+  return el;
+}
+function needSetup(){
+  if(cfg().openingDate)return true;
+  modal('Define primeiro o saldo inicial',`<p>Antes de registar movimentos, o sistema precisa de saber <b>com quanto dinheiro começa</b>.</p><p class="muted">${isAdmin()?'Vai a <b>Definições > Saldo inicial</b> e indica a data de arranque e o saldo de cada conta.':'O administrador ainda não definiu o saldo inicial. Pede-lhe para o fazer em Definições.'}</p>`,isAdmin()?()=>{S.page='settings';return Promise.resolve()}:null,'Ir para Definições');
+  return false;
+}
+
+/* =====================================================================
+   REGISTOS (dízimos, ofertas, despesas, transferências, membros)
+   ===================================================================== */
+const SPEC={
+ tithes:{t:'Dízimos',one:'dízimo',cols:['Recibo','Data','Dizimista','Mês ref.','Conta','Valor'],ral:5,
+  cells:r=>[recNo('tithes',r.receiptNo),fmt(r.date),esc(r.person),esc(monthLabel(r.ref)),esc(accName(r.accountId)),money(r.amount)],label:r=>r.person},
+ offerings:{t:'Ofertas',one:'oferta',cols:['Recibo','Data','Tipo','Descrição','Conta','Valor'],ral:5,
+  cells:r=>[recNo('offerings',r.receiptNo),fmt(r.date),esc(r.type),esc(r.desc),esc(accName(r.accountId)),money(r.amount)],label:r=>r.desc},
+ expenses:{t:'Despesas',one:'despesa',cols:['Nº','Data','Categoria','Descrição','Responsável','Conta','Valor'],ral:6,
+  cells:r=>[recNo('expenses',r.receiptNo),fmt(r.date),esc(r.category),esc(r.desc),esc(r.resp),esc(accName(r.accountId)),money(r.amount)],label:r=>r.desc},
+ members:{t:'Membros',one:'membro',cols:['Nome completo','Contacto','E-mail','Estado','Cadastro'],ral:-1,
+  cells:r=>[esc(r.name),esc(r.contact||'—'),esc(r.email||'—'),`<span class="badge ${r.status==='inactive'?'amber':'green'}">${r.status==='inactive'?'Inactivo':'Activo'}</span>`,fmt(r.since)],label:r=>r.name},
+ transfers:{t:'Transferências',one:'transferência',cols:['Data','De','Para','Valor','Nota'],ral:3,
+  cells:r=>[fmt(r.date),esc(accName(r.from)),esc(accName(r.to)),money(r.amount),esc(r.note||'—')],label:r=>accName(r.from)+' > '+accName(r.to)}
+};
+const dateOf=r=>r.date||r.since||'';
+function accOpts(cur){const a=activeAccs().map(x=>({v:x.id,l:x.name}));if(cur&&!a.some(x=>x.v===cur)){a.push({v:cur,l:accName(cur)+' (inactiva)'})}return a}
+function listOpts(list,cur){const a=list.map(x=>({v:x,l:x}));if(cur&&!list.includes(cur))a.push({v:cur,l:cur});return a}
+function checkDate(d,item){
+  const c=cfg();
+  if(!d)throw Error('Indica a data.');
+  if(c.openingDate&&d<c.openingDate)throw Error('A data não pode ser anterior à data de arranque do sistema ('+fmt(c.openingDate)+'). O saldo inicial já inclui esse período.');
+  if(lockedFor(d)||(item&&lockedFor(item.date)))throw Error('O mês está fechado (até '+fmt(c.closedThrough)+'). Só o administrador pode alterar.');
+}
+function recordForm(type,item){
+  if(!item&&type!=='members'&&!needSetup())return;
+  const sp=SPEC[type],c=cfg(),v=k=>item?item[k]??'':'';
+  const defDate=(()=>{const t=today();return c.openingDate&&t<c.openingDate?c.openingDate:t})();
+  const dmin=c.openingDate?`min="${c.openingDate}"`:'';
+  let html='';
+  if(type==='tithes')html=`<div class="fld"><label>Nome do dizimista</label><input name="person" list="mlist" value="${esc(v('person'))}" required autocomplete="off"><datalist id="mlist">${D.members.filter(m=>m.status!=='inactive').map(m=>`<option value="${esc(m.name)}">`).join('')}</datalist><small>Escolhe um membro ou escreve o nome.</small></div>${fld('Data de lançamento','date','date',v('date')||defDate,1,dmin)}${fld('Mês de referência','ref','month',v('ref')||defDate.slice(0,7),1)}${fld('Valor (MT)','amount','text',item?String(item.amount).replace('.',','):'',1,'inputmode="decimal" placeholder="0,00"')}${sel('Conta onde entrou','accountId',accOpts(v('accountId')),v('accountId')||'cash')}${area('Observação','note',v('note'))}`;
+  else if(type==='offerings')html=`${sel('Tipo de oferta','type',listOpts(c.offeringTypes,v('type')),v('type'))}${fld('Descrição','desc','text',v('desc'),1)}${fld('Data','date','date',v('date')||defDate,1,dmin)}${fld('Valor (MT)','amount','text',item?String(item.amount).replace('.',','):'',1,'inputmode="decimal" placeholder="0,00"')}${sel('Conta onde entrou','accountId',accOpts(v('accountId')),v('accountId')||'cash')}${area('Observação','note',v('note'))}`;
+  else if(type==='expenses')html=`${sel('Categoria','category',listOpts(c.expenseCats,v('category')),v('category'))}${fld('Descrição','desc','text',v('desc'),1)}${fld('Data','date','date',v('date')||defDate,1,dmin)}${fld('Valor (MT)','amount','text',item?String(item.amount).replace('.',','):'',1,'inputmode="decimal" placeholder="0,00"')}${fld('Responsável','resp','text',v('resp')||S.user.name,1)}${sel('Conta de onde saiu','accountId',accOpts(v('accountId')),v('accountId')||'cash')}${fld('Nº da factura / recibo','doc','text',v('doc'),0)}${area('Observação','note',v('note'))}`;
+  else html=`${fld('Nome completo','name','text',v('name'),1,'','')}${fld('Contacto','contact','tel',v('contact'),0)}${fld('E-mail','email','email',v('email'),0)}${fld('Endereço','address','text',v('address'),0)}${sel('Estado','status',[{v:'active',l:'Activo'},{v:'inactive',l:'Inactivo'}],v('status')||'active')}${fld('Data de cadastro','since','date',v('since')||today(),1)}`;
+  modal((item?'Editar ':'Registar ')+sp.one,`<div class="fg">${html}</div>`,async f=>{
+    const d={};for(const[k,val]of f.entries())d[k]=String(val).trim();
+    if(type==='members'){
+      if(!d.name)throw Error('Indica o nome.');
+      if(!item&&D.members.some(m=>m.name.toLowerCase()===d.name.toLowerCase())&&!confirm('Já existe um membro com este nome. Registar mesmo assim?'))throw silent();
+      if(d.email)d.email=d.email.toLowerCase();
+    }else{
+      checkDate(d.date,item);
+      d.amount=parseAmount(d.amount);
+      if(!Number.isFinite(d.amount)||d.amount<=0)throw Error('O valor deve ser maior que zero.');
+      if(!d.accountId)throw Error('Escolhe a conta.');
+      if(type==='tithes'){
+        if(!d.person)throw Error('Indica o dizimista.');
+        if(!/^\d{4}-\d{2}$/.test(d.ref))throw Error('Indica o mês de referência.');
+        const m=D.members.find(x=>x.name.toLowerCase()===d.person.toLowerCase());d.memberId=m?m.id:'';
+        const dup=live(D.tithes).find(t=>t.id!==(item&&item.id)&&t.person.toLowerCase()===d.person.toLowerCase()&&t.ref===d.ref&&Number(t.amount)===d.amount);
+        if(dup&&!confirm(`Já existe um dízimo de ${d.person} para ${monthLabel(d.ref)} com o mesmo valor (${recNo('tithes',dup.receiptNo)}). Registar mesmo assim?`))throw silent();
+      }
+      if(type==='expenses'){
+        const avail=balance(d.accountId,'9999-12-31')+(item&&item.status!=='voided'&&item.accountId===d.accountId?Number(item.amount):0);
+        if(avail-d.amount<-0.005&&!confirm(`A conta "${accName(d.accountId)}" tem ${money(avail)}. Esta despesa deixa o saldo negativo. Continuar?`))throw silent();
+      }
+    }
+    const now=new Date().toISOString(),label=sp.label(d);
+    if(item){await B.update(type,item.id,{...d,updatedAt:now,updatedBy:S.user.name},aud('editar',sp.t,label));toast(cap(sp.one)+(FEM.has(type)?' actualizada.':' actualizado.'))}
+    else{await B.create(type,{...d,status:'active',createdAt:now,createdBy:S.user.name,createdByUid:S.user.uid},aud('criar',sp.t,label));toast(cap(sp.one)+(FEM.has(type)?' registada.':' registado.'))}
+  });
+}
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+const FEM=new Set(['offerings','expenses','transfers']);
+function voidForm(type,item){
+  const sp=SPEC[type];
+  if(lockedFor(item.date))return toast('O mês está fechado. Só o administrador pode anular.','error');
+  modal('Anular '+sp.one+' '+recNo(type,item.receiptNo),`<p class="muted">O registo não é apagado: fica marcado como anulado, com o motivo, e deixa de contar nos saldos e relatórios.</p>${area('Motivo da anulação','reason','','')}`,async f=>{
+    const reason=String(f.get('reason')).trim();if(reason.length<3)throw Error('Indica o motivo da anulação.');
+    await B.update(type,item.id,{status:'voided',voidReason:reason,voidedAt:new Date().toISOString(),voidedBy:S.user.name,updatedAt:new Date().toISOString()},aud('anular',sp.t,sp.label(item)+' · '+reason));
+    toast('Registo anulado.');
+  },'Anular registo');
+}
+async function restoreRecord(type,item){
+  if(!confirm('Restaurar este registo? Volta a contar nos saldos.'))return;
+  try{await B.update(type,item.id,{status:'active',voidReason:'',updatedAt:new Date().toISOString()},aud('restaurar',SPEC[type].t,SPEC[type].label(item)));toast('Registo restaurado.')}catch(e){toast(errorText(e),'error')}
+}
+function transferForm(){
+  if(!needSetup())return;
+  const accs=activeAccs().map(a=>({v:a.id,l:a.name}));
+  if(accs.length<2)return toast('São precisas pelo menos duas contas activas.','error');
+  const c=cfg(),dmin=c.openingDate?`min="${c.openingDate}"`:'';
+  modal('Transferência entre contas',`<div class="fg">${sel('Sai de','from',accs,accs[0].v)}${sel('Entra em','to',accs,accs[1].v)}${fld('Valor (MT)','amount','text','',1,'inputmode="decimal" placeholder="0,00"')}${fld('Data','date','date',today()<c.openingDate?c.openingDate:today(),1,dmin)}${fld('Nota','note','text','',0)}</div>`,async f=>{
+    const d={from:f.get('from'),to:f.get('to'),amount:parseAmount(f.get('amount')),date:f.get('date'),note:String(f.get('note')).trim()};
+    if(d.from===d.to)throw Error('Escolhe contas diferentes.');
+    if(!Number.isFinite(d.amount)||d.amount<=0)throw Error('O valor deve ser maior que zero.');
+    checkDate(d.date);
+    const avail=balance(d.from,'9999-12-31');
+    if(avail-d.amount<-0.005&&!confirm(`A conta "${accName(d.from)}" tem ${money(avail)}. A transferência deixa o saldo negativo. Continuar?`))throw silent();
+    await B.create('transfers',{...d,status:'active',createdAt:new Date().toISOString(),createdBy:S.user.name,createdByUid:S.user.uid},aud('criar','Transferências',accName(d.from)+' > '+accName(d.to)+' · '+money(d.amount)));
+    toast('Transferência registada.');
+  });
+}
+function memberHistory(m){
+  const h=live(D.tithes).filter(t=>memberOf(t,D.members)===m).sort((a,b)=>b.date.localeCompare(a.date));
+  modal('Dízimos · '+m.name,h.length?`<div class="tw"><table style="min-width:0"><thead><tr><th>Recibo</th><th>Data</th><th>Mês ref.</th><th class="right">Valor</th></tr></thead><tbody>${h.map(x=>`<tr><td>${recNo('tithes',x.receiptNo)}</td><td>${fmt(x.date)}</td><td>${esc(monthLabel(x.ref))}</td><td class="right">${money(x.amount)}</td></tr>`).join('')}</tbody></table></div><p><b>Total contribuído: ${money(sum(h))}</b></p>`:'<p class="empty">Sem dízimos associados a este membro.</p>',null);
+}
+function downloadReceipt(type,r){
+  const c=cfg(),n=recNo(type,r.receiptNo);let doc;
+  const st=r.status==='voided'?[['Estado','ANULADO · '+(r.voidReason||'')]]:[];
+  if(type==='tithes')doc={title:'RECIBO DE DÍZIMO',kindLabel:'Recibo',number:n,amountLabel:'Valor recebido',amount:r.amount,sig1:'Quem recebeu',sig2:'Dizimista',rows:[['Recebemos de',r.person],['Referente a','Dízimo de '+monthLabel(r.ref)],['Data',fmt(r.date)],['Conta de entrada',accName(r.accountId)],['Observação',r.note||''],...st].filter(x=>x[1])};
+  else if(type==='offerings')doc={title:'RECIBO DE OFERTA',kindLabel:'Recibo',number:n,amountLabel:'Valor recebido',amount:r.amount,sig1:'Quem recebeu',sig2:'Tesoureiro(a)',rows:[['Tipo de oferta',r.type],['Descrição',r.desc],['Data',fmt(r.date)],['Conta de entrada',accName(r.accountId)],['Observação',r.note||''],...st].filter(x=>x[1])};
+  else doc={title:'COMPROVATIVO DE DESPESA',kindLabel:'Despesa',number:n,amountLabel:'Valor pago',amount:r.amount,sig1:'Responsável',sig2:'Tesoureiro(a)',rows:[['Categoria',r.category],['Descrição',r.desc],['Responsável',r.resp],['Data',fmt(r.date)],['Conta de saída',accName(r.accountId)],['Nº da factura / recibo',r.doc||''],['Observação',r.note||''],...st].filter(x=>x[1])};
+  downloadBlob(`${type==='expenses'?'despesa':'recibo'}-${n}.pdf`,pdfReceipt(doc,c,S.user.name),'application/pdf');
+}
+
+/* =====================================================================
+   NAVEGAÇÃO E ESTRUTURA
+   ===================================================================== */
+const NAV=[['dashboard','dashboard','Painel'],['tithes','tithes','Dízimos'],['offerings','offerings','Ofertas'],['expenses','expenses','Despesas'],['cash','cash','Contas e transferências'],['members','members','Membros'],['reports','reports','Relatórios'],['users','users','Utilizadores'],['audit','audit','Histórico'],['settings','settings','Definições']];
+const TITLE={dashboard:'Painel',tithes:'Dízimos',offerings:'Ofertas',expenses:'Despesas',cash:'Contas e transferências',members:'Membros',reports:'Relatórios',users:'Utilizadores',audit:'Histórico de operações',settings:'Definições'};
+function go(p){S.page=p;S.pg=1;S.q='';S.from='';S.to='';S.menu=false;S.showVoid=false;S.rep=null;render()}
+function shell(){
+  const pend=D.users.filter(u=>u.status==='pending').length;
+  const items=NAV.filter(([k])=>(k!=='users'&&k!=='audit')||isAdmin());
+  $('#app').innerHTML=`<div class="side ${S.menu?'open':''}"><div class="brand"><div class="logo">${ic('cross')}</div><div><strong>${esc(cfg().churchName)}</strong><small>Gestão Financeira</small></div></div>
+  <nav class="nav">${items.map(([k,i,t])=>`<button data-act="nav" data-page="${k}" class="${S.page===k?'on':''}">${ic(i)}<span>${t}</span>${k==='users'&&pend?`<span class="cnt">${pend}</span>`:''}</button>`).join('')}</nav>
+  <button class="lo" data-act="logout">${ic('logout')}<span>Terminar sessão</span></button></div>
+  <section class="main"><header class="top noprint"><div class="tl"><button class="ib hamb" data-act="menu" aria-label="Menu">${ic('menu')}</button><h1>${TITLE[S.page]}</h1></div>
+  <div class="ta"><div class="who"><div class="av">${esc((S.user.name||'U')[0].toUpperCase())}</div><span><b>${esc(S.user.name)}</b><br><small class="muted">${roleName[S.user.role]}</small></span></div><button class="ib" data-act="theme" title="Modo claro/escuro" aria-label="Alternar tema">${ic(document.body.classList.contains('dark')?'sun':'moon')}</button></div></header>
+  <main class="content" id="view"></main></section>`;
+}
+function loadingView(msg='A sincronizar os dados…'){$('#app').innerHTML=`<div class="center-screen"><div class="spinner"></div><p>${msg}</p></div>`}
+let _rt=null;
+function scheduleRender(now){
+  clearTimeout(_rt);
+  _rt=setTimeout(()=>{
+    if(!S.user)return;
+    const a=document.activeElement;
+    if(!now&&a&&/^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName)&&a.closest('#view'))return;
+    render();
+  },now?0:150);
+}
+function render(){
+  if(!S.user)return;
+  const names=listenNames();
+  if(!names.every(n=>D.loaded[n]))return loadingView();
+  if((S.page==='users'||S.page==='audit')&&!isAdmin())S.page='dashboard';
+  shell();
+  const p=S.page;
+  if(p==='dashboard')dashboard();else if(p==='cash')cashPage();else if(SPEC[p])listPage(p);else if(p==='reports')reportsPage();else if(p==='users')usersPage();else if(p==='audit')auditPage();else settingsPage();
+}
+
+/* =====================================================================
+   AUTENTICAÇÃO
+   ===================================================================== */
+let fails=[];
+function authView(mode='login'){
+  if(S.initDone===false)mode='setup';
+  const setup=mode==='setup',signup=mode==='signup';
+  $('#app').innerHTML=`<div class="auth"><section class="ab"><div class="logo">${ic('cross')}</div><h1>Gestão Financeira<br>da Igreja</h1><p>Uma forma simples, segura e organizada de gerir os recursos da igreja.</p>
+  <ul style="padding:0"><li>${ic('wallet')} Saldos por conta sempre actualizados</li><li>${ic('file')} Recibos e relatórios em PDF</li><li>${ic('shield')} Acesso por perfil e histórico de operações</li></ul></section>
+  <section class="ap">${setup?'':`<div class="tabs"><button class="${!signup?'on':''}" data-act="authtab" data-tab="login">Entrar</button><button class="${signup?'on':''}" data-act="authtab" data-tab="signup">Criar conta</button></div>`}
+  <h2>${setup?'Primeira utilização':signup?'Criar conta':'Acesso ao sistema'}</h2>
+  <p class="muted">${setup?'Cria a conta do administrador. Esta conta terá controlo total.':signup?'A conta ficará pendente até o administrador a aprovar.':'Acede com o teu e-mail e palavra-passe.'}</p>
+  ${B&&B.demo?'<div class="notice">Modo de demonstração: os dados existem só enquanto esta página estiver aberta.</div>':''}
+  <form data-form="${setup?'setup':signup?'signup':'login'}">${setup||signup?fld('Nome completo','name','text','',1,'autocomplete="name"'):''}${fld('E-mail','email','email','',1,'autocomplete="email"')}${fld('Palavra-passe','password','password','',1,`autocomplete="${setup||signup?'new-password':'current-password'}"`)}${setup||signup?fld('Confirmar palavra-passe','confirm','password','',1,'autocomplete="new-password"'):`<div class="toolbar" style="margin-top:6px"><label><input type="checkbox" name="remember" checked> Lembrar-me</label><button type="button" class="linkbtn" data-act="forgot" style="margin-left:auto">Esqueci a palavra-passe</button></div>`}
+  <button class="btn primary" style="width:100%;margin-top:10px">${setup?'Criar administrador e entrar':signup?'Criar conta':'Entrar'}</button></form></section></div>`;
+}
+async function doLogin(f){
+  const now=Date.now();fails=fails.filter(t=>now-t<600000);
+  if(fails.length>=5)throw Error('Demasiadas tentativas falhadas. Aguarda 10 minutos.');
+  try{await B.signIn(String(f.get('email')).trim().toLowerCase(),f.get('password'),!!f.get('remember'))}catch(e){if(/invalid-credential|user-not-found|wrong-password/.test(e.code||''))fails.push(Date.now());throw e}
+}
+async function doSignup(f,setup){
+  const name=String(f.get('name')).trim(),email=String(f.get('email')).trim().toLowerCase();
+  if(name.length<2)throw Error('Indica o nome completo.');
+  if(f.get('password')!==f.get('confirm'))throw Error('As palavras-passe não coincidem.');
+  if(String(f.get('password')).length<6)throw Error('A palavra-passe deve ter pelo menos 6 caracteres.');
+  S.registering=true;
+  try{
+    const uid=await B.signUp(name,email,f.get('password'));
+    const prof={uid,name,email,role:setup?'admin':'pending',status:setup?'approved':'pending',active:true,createdAt:new Date().toISOString()};
+    await B.createProfile(prof,setup);
+    if(setup){S.initDone=true;S.registering=false;await acceptUser(prof)}
+    else{await B.signOut();S.registering=false;authView('login');toast('Conta criada. Aguarda a aprovação do administrador.')}
+  }finally{S.registering=false}
+}
+async function acceptUser(p){
+  S.user=p;D.loaded={};S.ready=false;startListen();loadingView();
+}
+async function handleAuth(u){
+  if(S.registering)return;
+  if(!u){stopListen();S.user=null;authView('login');return}
+  try{
+    const p=await B.getProfile(u.uid);
+    if(!p){await B.signOut();authView('login');toast('Esta conta não tem perfil no sistema. Contacta o administrador.','error');return}
+    if(p.active===false||p.status!=='approved'){await B.signOut();authView('login');toast(p.active===false?'Esta conta foi desactivada.':'A conta ainda aguarda a aprovação do administrador.','error');return}
+    if(S.user&&S.user.uid===p.uid){S.user=p;return}
+    await acceptUser(p);
+  }catch(e){authView('login');toast(errorText(e),'error')}
+}
+function logout(){B.signOut()}
+let idleT=null;
+function bumpIdle(){clearTimeout(idleT);if(!S.user)return;idleT=setTimeout(()=>{if(S.user){toast('Sessão terminada por inactividade.','error');B.signOut()}},30*60*1000)}
+
+/* =====================================================================
+   SINCRONIZAÇÃO EM TEMPO REAL
+   ===================================================================== */
+let unsubs=[];
+const listenNames=()=>{const n=['settings','tithes','offerings','expenses','transfers','members'];if(isAdmin())n.push('users','auditLogs');return n};
+function startListen(){
+  stopListen();D.loaded={};
+  listenNames().forEach(name=>{
+    unsubs.push(B.listen(name,data=>{
+      if(name==='settings'){D.cfg=data;if(data===null&&isAdmin()&&!S.cfgCreating){S.cfgCreating=true;B.setSettings(clean(DEF_CFG),aud('criar','Definições','Configuração inicial')).catch(e=>console.warn(e))}}
+      else D[name]=data;
+      D.loaded[name]=true;scheduleRender(!S.ready);if(listenNames().every(n=>D.loaded[n]))S.ready=true;
+    },err=>{console.error(name,err);if(!S.errShown){S.errShown=true;toast(errorText(err),'error')}}));
+  });
+  bumpIdle();
+}
+function stopListen(){unsubs.forEach(u=>{try{u()}catch(e){}});unsubs=[];D.loaded={};S.ready=false;S.cfgCreating=false;S.errShown=false;D.cfg=null;['tithes','offerings','expenses','transfers','members','users','auditLogs'].forEach(k=>D[k]=[])}
+
+/* =====================================================================
+   PÁGINAS
+   ===================================================================== */
+function bars(labels,a,b){
+  const W=560,H=240,pl=48,pb=26,pt=10,max=Math.max(1,...a,...b),bw=(W-pl-8)/labels.length;
+  const sh=n=>n>=1e6?(n/1e6).toFixed(1)+'M':n>=1e3?Math.round(n/1e3)+'k':String(Math.round(n));
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Entradas e despesas por mês">`;
+  for(let i=0;i<=4;i++){const y=pt+(H-pt-pb)*(1-i/4);s+=`<line x1="${pl}" x2="${W-6}" y1="${y}" y2="${y}" stroke="var(--line)"/><text x="${pl-6}" y="${y+4}" text-anchor="end" font-size="10" fill="var(--muted)">${sh(max*i/4)}</text>`}
+  labels.forEach((l,i)=>{const x=pl+i*bw+bw*.14,w=bw*.34,h1=(H-pt-pb)*a[i]/max,h2=(H-pt-pb)*b[i]/max;
+    s+=`<rect x="${x}" y="${H-pb-h1}" width="${w}" height="${h1}" rx="3" fill="var(--purple)"/><rect x="${x+w+3}" y="${H-pb-h2}" width="${w}" height="${h2}" rx="3" fill="var(--red)"/><text x="${pl+i*bw+bw/2}" y="${H-8}" text-anchor="middle" font-size="10" fill="var(--muted)">${l}</text>`});
+  return s+'</svg>';
+}
+function donut(t,o){
+  const tot=t+o;if(!tot)return '<p class="empty">Sem entradas neste mês.</p>';
+  const C=2*Math.PI*60,pt=C*t/tot;
+  return `<svg viewBox="0 0 160 160" style="max-width:210px;margin:auto"><circle cx="80" cy="80" r="60" fill="none" stroke="var(--blue)" stroke-width="22"/><circle cx="80" cy="80" r="60" fill="none" stroke="var(--purple)" stroke-width="22" stroke-dasharray="${pt} ${C-pt}" transform="rotate(-90 80 80)"/></svg><div class="legend"><span><i class="dot" style="background:var(--purple)"></i>Dízimos ${money(t)}</span><span><i class="dot" style="background:var(--blue)"></i>Ofertas ${money(o)}</span></div>`;
+}
+function dashboard(){
+  const c=cfg(),now=today(),mon=now.slice(0,7);
+  const inM=a=>live(a).filter(x=>x.date.startsWith(mon));
+  const tM=sum(inM(D.tithes)),oM=sum(inM(D.offerings)),eM=sum(inM(D.expenses)),bal=totalBalance(now);
+  const keys=[],labels=[];
+  for(let i=5;i>=0;i--){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-i);const k=d.getFullYear()+'-'+pad(d.getMonth()+1);keys.push(k);labels.push(MESES[d.getMonth()].slice(0,3)+'/'+String(d.getFullYear()).slice(2))}
+  const agg=(arr,k)=>sum(live(arr).filter(x=>x.date.startsWith(k)));
+  const ins=keys.map(k=>agg(D.tithes,k)+agg(D.offerings,k)),outs=keys.map(k=>agg(D.expenses,k));
+  const latest=[...live(D.tithes).map(x=>({k:'Dízimo',n:x.person,d:x.date,a:x.amount,c:x.createdAt})),...live(D.offerings).map(x=>({k:'Oferta',n:x.desc,d:x.date,a:x.amount,c:x.createdAt})),...live(D.expenses).map(x=>({k:'Despesa',n:x.desc,d:x.date,a:-x.amount,c:x.createdAt}))].sort((a,b)=>b.d.localeCompare(a.d)||String(b.c).localeCompare(String(a.c))).slice(0,8);
+  const alerts=[];
+  if(!c.openingDate)alerts.push(`<div class="notice bad">${ic('alert')}<div><b>Falta definir o saldo inicial.</b> Sem ele o sistema não sabe com quanto dinheiro começa.</div>${isAdmin()?`<button class="btn soft sm" data-act="nav" data-page="settings">Definir agora</button>`:''}</div>`);
+  const negs=c.accounts.filter(a=>balance(a.id,now)<-0.005);
+  if(negs.length)alerts.push(`<div class="notice bad">${ic('alert')}<div><b>Saldo negativo:</b> ${negs.map(a=>esc(a.name)+' ('+money(balance(a.id,now))+')').join(', ')}. Confirma os lançamentos.</div></div>`);
+  const pend=D.users.filter(u=>u.status==='pending').length;
+  if(isAdmin()&&pend)alerts.push(`<div class="notice info">${ic('users')}<div><b>${pend} conta(s) a aguardar aprovação.</b></div><button class="btn soft sm" data-act="nav" data-page="users">Ver</button></div>`);
+  const prevM=(()=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);return d.getFullYear()+'-'+pad(d.getMonth()+1)})();
+  if(isAdmin()&&c.openingDate&&monthEnd(prevM)>=c.openingDate&&(!c.closedThrough||c.closedThrough<monthEnd(prevM))&&now.slice(8)>='05')alerts.push(`<div class="notice info">${ic('lock')}<div>O mês de <b>${monthLabel(prevM)}</b> ainda não está fechado. Depois de conferir, fecha-o em Definições.</div><button class="btn soft sm" data-act="nav" data-page="settings">Fechar mês</button></div>`);
+  const lb=c.lastBackup?(Date.now()-new Date(c.lastBackup))/864e5:999;
+  if(isAdmin()&&lb>30&&(D.tithes.length+D.offerings.length+D.expenses.length))alerts.push(`<div class="notice">${ic('download')}<div>A última cópia de segurança tem mais de 30 dias. Faz uma em Definições.</div><button class="btn soft sm" data-act="backup">Fazer agora</button></div>`);
+  const missing=D.members.filter(m=>m.status!=='inactive'&&!live(D.tithes).some(t=>t.ref===mon&&memberOf(t,D.members)===m)).length;
+  const card=(l,v,i,cls='')=>`<div class="stat"><div class="l"><span class="ico">${ic(i)}</span>${l}</div><b class="${cls}">${v}</b></div>`;
+  $('#view').innerHTML=`${alerts.join('')}
+  <div class="cards">${card('Saldo actual',money(bal),'wallet',bal<0?'neg':'')}${card('Entradas do mês',money(tM+oM),'up')}${card('Despesas do mês',money(eM),'down')}${card('Resultado do mês',money(tM+oM-eM),'reports',tM+oM-eM<0?'neg':'')}${card('Membros activos',D.members.filter(m=>m.status!=='inactive').length,'members')}</div>
+  <section class="panel"><h2>${ic('cash')} Saldo por conta${c.openingDate?` <span class="muted" style="font-weight:400">· desde ${fmt(c.openingDate)}</span>`:''}</h2><div class="accs">${c.accounts.filter(a=>a.active!==false||Math.abs(balance(a.id,now))>0.004).map(a=>{const b=balance(a.id,now);return `<div class="acc"><span>${esc(a.name)}</span><b class="${b<0?'neg':''}">${money(b)}</b></div>`}).join('')}</div></section>
+  <div class="g2"><section class="panel"><h2>${ic('reports')} Entradas e despesas · últimos 6 meses</h2><div class="chart">${bars(labels,ins,outs)}</div><div class="legend"><span><i class="dot" style="background:var(--purple)"></i>Entradas</span><span><i class="dot" style="background:var(--red)"></i>Despesas</span></div></section>
+  <section class="panel"><h2>${ic('tithes')} Entradas do mês</h2><div class="chart">${donut(tM,oM)}</div></section></div>
+  <div class="g2"><section class="panel"><h2>${ic('audit')} Últimos lançamentos</h2><div class="tw"><table style="min-width:0"><thead><tr><th>Tipo</th><th>Descrição</th><th>Data</th><th class="right">Valor</th></tr></thead><tbody>${latest.length?latest.map(x=>`<tr><td>${x.k}</td><td>${esc(x.n)}</td><td>${fmt(x.d)}</td><td class="right nowrap ${x.a<0?'neg':''}">${money(x.a)}</td></tr>`).join(''):'<tr><td class="empty" colspan="4">Sem lançamentos.</td></tr>'}</tbody></table></div></section>
+  <section class="panel"><h2>${ic('plus')} Atalhos</h2><div class="quick">${canWrite()?`<button class="btn primary" data-act="add" data-type="tithes">${ic('plus')} Novo dízimo</button><button class="btn soft" data-act="add" data-type="offerings">${ic('plus')} Nova oferta</button><button class="btn soft" data-act="add" data-type="expenses">${ic('plus')} Nova despesa</button><button class="btn soft" data-act="transfer">${ic('transfer')} Transferência</button>`:''}<button class="btn soft" data-act="nav" data-page="reports">${ic('reports')} Relatórios</button></div>
+  ${D.members.length?`<p class="muted" style="margin-top:14px">${missing?`<b>${missing}</b> membro(s) activo(s) ainda sem dízimo de ${monthLabel(mon)}.`:`Todos os membros activos têm dízimo de ${monthLabel(mon)}.`} <button class="linkbtn" data-act="rquick" data-kind="missing">Ver lista</button></p>`:''}</section></div>`;
+}
+function filteredList(type){
+  const q=S.q.toLowerCase();let data=[...D[type]];
+  if(type==='members')data.sort(byName);else data.sort((a,b)=>dateOf(b).localeCompare(dateOf(a))||(b.receiptNo||0)-(a.receiptNo||0));
+  return data.filter(r=>{if(!S.showVoid&&r.status==='voided')return false;const d=dateOf(r);if(S.from&&d&&d<S.from)return false;if(S.to&&d&&d>S.to)return false;return !q||Object.values(r).join(' ').toLowerCase().includes(q)});
+}
+function rangebar(dates=true,extra=''){return `<div class="toolbar noprint">${dates?`<label>De <input type="date" id="from" value="${esc(S.from)}"></label><label>Até <input type="date" id="to" value="${esc(S.to)}"></label>`:''}<input id="q" placeholder="Pesquisar…" value="${esc(S.q)}" style="min-width:190px"><button class="btn soft" data-act="filter">${ic('search')} Filtrar</button><button class="btn soft" data-act="clear">Limpar</button>${extra}</div>`}
+function paginate(data){const size=12,total=Math.max(1,Math.ceil(data.length/size));S.pg=Math.min(Math.max(1,S.pg),total);return{slice:data.slice((S.pg-1)*size,S.pg*size),pager:`<div class="pager noprint"><span class="muted">${data.length} registo(s) · página ${S.pg}/${total}</span><button class="btn soft sm" data-act="prev" ${S.pg<=1?'disabled':''}>Anterior</button><button class="btn soft sm" data-act="next" ${S.pg>=total?'disabled':''}>Seguinte</button></div>`}}
+function rowActions(type,r){
+  const w=canWrite(),vo=r.status==='voided';let h='';
+  if(type==='members')return (`<button class="btn soft sm" data-act="hist" data-id="${r.id}">Dízimos</button> `)+(w?`<button class="btn soft sm" data-act="edit" data-type="${type}" data-id="${r.id}">${ic('edit','sm')} Editar</button>`:'');
+  if(['tithes','offerings','expenses'].includes(type))h+=`<button class="btn soft sm" data-act="receipt" data-type="${type}" data-id="${r.id}" title="Descarregar PDF">${ic('file','sm')} PDF</button> `;
+  if(!w)return h;
+  if(vo)return h+`<span class="badge red" title="${esc(r.voidReason||'')}">Anulado</span>`+(isAdmin()&&!lockedFor(r.date)?` <button class="btn soft sm" data-act="restore" data-type="${type}" data-id="${r.id}">${ic('undo','sm')} Restaurar</button>`:'');
+  if(lockedFor(r.date))return h+`<span class="badge amber">${ic('lock','sm')} Mês fechado</span>`;
+  return h+`<button class="btn soft sm" data-act="edit" data-type="${type}" data-id="${r.id}">${ic('edit','sm')} Editar</button> <button class="btn danger sm" data-act="void" data-type="${type}" data-id="${r.id}">${ic('ban','sm')} Anular</button>`;
+}
+function listPage(type){
+  const sp=SPEC[type],data=filteredList(type),pg=paginate(data),isM=type==='members';
+  const hasV=D[type].some(r=>r.status==='voided');
+  const rows=pg.slice.map(r=>`<tr class="${r.status==='voided'?'void':''}">${sp.cells(r).map((c,i)=>`<td class="${i===sp.ral?'right nowrap':''}">${c}</td>`).join('')}<td class="act">${rowActions(type,r)}</td></tr>`).join('');
+  $('#view').innerHTML=`<div class="toolbar noprint">${canWrite()?`<button class="btn primary" data-act="add" data-type="${type}">${ic('plus')} Novo registo</button>`:''}${isM&&canWrite()?`<button class="btn soft" data-act="mimport">${ic('upload')} Importar lista (CSV)</button><input type="file" id="mfile" accept=".csv,.txt,text/csv,text/plain" hidden>`:''}${!isM?`<span class="badge">Total: ${money(sum(live(data)))}</span>`:''}${hasV?`<label class="muted"><input type="checkbox" data-act="showvoid" ${S.showVoid?'checked':''}> Mostrar anulados</label>`:''}</div>${rangebar()}
+  <div class="tw"><table><thead><tr>${sp.cols.map((h,i)=>`<th class="${i===sp.ral?'right':''}">${h}</th>`).join('')}<th></th></tr></thead><tbody>${rows||`<tr><td class="empty" colspan="${sp.cols.length+1}">${D[type].length?'Sem resultados.':'Ainda não existem registos.'}</td></tr>`}</tbody></table></div>${pg.pager}`;
+}
+function cashPage(){
+  const c=cfg(),now=today(),data=D.transfers.filter(r=>S.showVoid||r.status!=='voided').sort((a,b)=>b.date.localeCompare(a.date)),pg=paginate(data);
+  $('#view').innerHTML=`${c.openingDate?'':`<div class="notice bad">${ic('alert')}<div>O saldo inicial ainda não foi definido.</div></div>`}
+  <section class="panel"><h2>${ic('wallet')} Saldos das contas · total ${money(totalBalance(now))}</h2><div class="accs">${c.accounts.map(a=>{const b=balance(a.id,now);return `<div class="acc"><span>${esc(a.name)}${a.active===false?' (inactiva)':''}</span><b class="${b<0?'neg':''}">${money(b)}</b><span>Saldo inicial: ${money(a.opening||0)}</span></div>`}).join('')}</div></section>
+  <div class="toolbar noprint">${canWrite()?`<button class="btn primary" data-act="transfer">${ic('transfer')} Nova transferência</button>`:''}${isAdmin()?`<button class="btn soft" data-act="nav" data-page="settings">${ic('settings')} Saldo inicial e contas</button>`:''}</div>
+  <h2 style="font-size:15px">Transferências entre contas</h2>
+  <div class="tw"><table><thead><tr><th>Data</th><th>De</th><th>Para</th><th class="right">Valor</th><th>Nota</th><th></th></tr></thead><tbody>${pg.slice.map(r=>`<tr class="${r.status==='voided'?'void':''}"><td>${fmt(r.date)}</td><td>${esc(accName(r.from))}</td><td>${esc(accName(r.to))}</td><td class="right nowrap">${money(r.amount)}</td><td>${esc(r.note||'—')}</td><td class="act">${!canWrite()?'':r.status==='voided'?'<span class="badge red">Anulada</span>':lockedFor(r.date)?'<span class="badge amber">Mês fechado</span>':`<button class="btn danger sm" data-act="void" data-type="transfers" data-id="${r.id}">${ic('ban','sm')} Anular</button>`}</td></tr>`).join('')||'<tr><td class="empty" colspan="6">Sem transferências.</td></tr>'}</tbody></table></div>${pg.pager}`;
+}
+
+/* ----- Relatórios ----- */
+function reportsPage(){
+  const c=cfg();if(!S.rfrom){const t=today(),f=t.slice(0,8)+'01';S.rfrom=c.openingDate&&f<c.openingDate?c.openingDate:f;S.rto=t}
+  $('#view').innerHTML=`<section class="panel"><h2>${ic('reports')} Relatórios</h2><div class="rtypes">${Object.entries(REPS).map(([k,r])=>`<button class="rtype ${S.repKind===k?'on':''}" data-act="rpick" data-kind="${k}">${ic(r.i)}<b>${r.t}</b><span>${r.d}</span></button>`).join('')}</div>
+  <div class="toolbar noprint"><label>De <input type="date" id="rfrom" value="${S.rfrom}"></label><label>Até <input type="date" id="rto" value="${S.rto}"></label>
+  <button class="btn soft sm" data-act="rpreset" data-p="month">Este mês</button><button class="btn soft sm" data-act="rpreset" data-p="prev">Mês anterior</button><button class="btn soft sm" data-act="rpreset" data-p="year">Este ano</button></div>
+  ${S.repKind==='annual'?'<p class="muted" style="margin-top:-6px">O relatório anual usa o ano da data inicial.</p>':''}
+  <div class="toolbar noprint"><button class="btn primary" data-act="rpreview">${ic('search')} Pré-visualizar</button><button class="btn green" data-act="rpdf">${ic('download')} Descarregar PDF</button><button class="btn soft" data-act="rcsv">${ic('download')} Excel (CSV)</button><button class="btn soft" data-act="rprint">${ic('printer')} Imprimir</button></div>
+  <div id="rep-area"><p class="empty">Escolhe o relatório e o período e clica em Pré-visualizar ou em Descarregar PDF.</p></div></section>`;
+  if(S.rep)$('#rep-area').innerHTML=`<div id="rep-print">${reportHtml(S.rep)}</div>`;
+}
+function buildCurrentReport(){
+  S.rfrom=$('#rfrom').value;S.rto=$('#rto').value;
+  const r=reportData(S.repKind,S.rfrom,S.rto);S.rep=r;return r;
+}
+function showReport(){const r=buildCurrentReport();$('#rep-area').innerHTML=`<div id="rep-print">${reportHtml(r)}</div>`;return r}
+const repFile=(r,ext)=>`relatorio-${r.kind}-${r.from}_${r.to}.${ext}`;
+
+/* ----- Utilizadores ----- */
+function usersPage(){
+  const q=S.q.toLowerCase();
+  const data=D.users.filter(u=>!q||`${u.name} ${u.email} ${u.role}`.toLowerCase().includes(q)).sort((a,b)=>(b.status==='pending')-(a.status==='pending')||a.name.localeCompare(b.name,'pt'));
+  const pg=paginate(data);
+  $('#view').innerHTML=`<div class="notice info">${ic('shield')}<div>As pessoas criam conta na página de entrada e ficam <b>pendentes</b>. Aqui aprovas e escolhes a função: <b>Tesoureiro</b> regista e edita; <b>Consultor</b> só consulta e gera relatórios.</div></div>${rangebar(false)}
+  <div class="tw"><table><thead><tr><th>Nome</th><th>E-mail</th><th>Função</th><th>Estado</th><th></th></tr></thead><tbody>${pg.slice.map(u=>{const me=u.uid===S.user.uid,pend=u.status==='pending';return `<tr><td>${esc(u.name)}</td><td>${esc(u.email)}</td><td>${me?`<span class="badge">${roleName[u.role]}</span>`:`<select data-urole="${u.uid}">${(pend?['pending','treasurer','consultant','admin']:['admin','treasurer','consultant']).map(k=>`<option value="${k}" ${u.role===k?'selected':''}>${roleName[k]}</option>`).join('')}</select>`}</td><td>${pend?'<span class="badge amber">Aguarda aprovação</span>':u.active===false?'<span class="badge red">Desactivado</span>':'<span class="badge green">Activo</span>'}</td><td class="act">${me?'<span class="muted">Conta actual</span>':pend?`<button class="btn green sm" data-act="uapprove" data-id="${u.uid}">${ic('check','sm')} Aprovar</button>`:`<button class="btn soft sm" data-act="urole" data-id="${u.uid}">Guardar função</button> <button class="btn soft sm" data-act="utoggle" data-id="${u.uid}">${u.active===false?'Activar':'Desactivar'}</button> <button class="btn soft sm" data-act="ureset" data-id="${u.uid}">${ic('mail','sm')} Redefinir palavra-passe</button>`}</td></tr>`}).join('')||'<tr><td class="empty" colspan="5">Sem utilizadores.</td></tr>'}</tbody></table></div>${pg.pager}`;
+}
+function auditPage(){
+  const q=S.q.toLowerCase(),data=D.auditLogs.filter(x=>!q||JSON.stringify(x).toLowerCase().includes(q)),pg=paginate(data);
+  $('#view').innerHTML=`<p class="muted">Mostra as últimas 500 operações.</p>${rangebar(false)}<div class="tw"><table><thead><tr><th>Data/hora</th><th>Utilizador</th><th>Operação</th><th>Área</th><th>Detalhe</th></tr></thead><tbody>${pg.slice.map(x=>`<tr><td class="nowrap">${new Date(x.createdAt).toLocaleString('pt-MZ')}</td><td>${esc(x.actorName)}</td><td>${esc(x.op)}</td><td>${esc(x.area)}</td><td>${esc(x.desc)}</td></tr>`).join('')||'<tr><td class="empty" colspan="5">Sem operações registadas.</td></tr>'}</tbody></table></div>${pg.pager}`;
+}
+
+/* ----- Definições ----- */
+function settingsPage(){
+  const c=cfg(),a=isAdmin(),dis=a?'':'disabled';
+  const last=c.lastBackup?new Date(c.lastBackup).toLocaleString('pt-MZ'):'nunca';
+  $('#view').innerHTML=`
+  <section class="panel"><h2>${ic('cross')} Identidade da igreja</h2><form data-form="church" style="max-width:520px">${fld('Nome da igreja','churchName','text',c.churchName,1,dis)}<button class="btn primary" ${dis}>Guardar nome</button></form></section>
+  <section class="panel"><h2>${ic('wallet')} Saldo inicial e contas</h2>
+  <div class="notice info">${ic('alert')}<div><b>Como funciona:</b> indica o dia em que a igreja começa a usar o sistema e o dinheiro que existia em cada conta nesse momento. Exemplo: fechaste Junho com 2 000,00 MT e começas em Julho. Data de arranque <b>01/07/${new Date().getFullYear()}</b> e <b>2 000,00</b> na conta onde está o dinheiro. A partir daí o sistema calcula tudo sozinho.</div></div>
+  <form data-form="opening">${fld('Data de arranque (primeiro dia de uso)','openingDate','date',c.openingDate,1,dis,'Os lançamentos não podem ter data anterior a esta.')}
+  <div class="fld"><label>Contas e saldo inicial (MT)</label><div id="accrows">${c.accounts.map((x,i)=>`<div class="accrow"><input data-an="${i}" value="${esc(x.name)}" ${dis} aria-label="Nome da conta"><input data-ao="${i}" value="${esc(String(x.opening||0).replace('.',','))}" inputmode="decimal" ${dis} aria-label="Saldo inicial"><label class="nowrap"><input type="checkbox" data-aa="${i}" ${x.active!==false?'checked':''} ${dis}> activa</label></div>`).join('')}</div></div>
+  ${a?`<div class="toolbar"><input id="newacc" placeholder="Nome de uma nova conta (ex.: Banco BCI)" style="min-width:260px"><button type="button" class="btn soft" data-act="addacc">${ic('plus')} Adicionar conta</button></div>`:''}
+  <p class="muted">Saldo inicial total: <b>${money(c.accounts.reduce((s,x)=>s+(Number(x.opening)||0),0))}</b></p>
+  <button class="btn primary" ${dis}>Guardar saldo inicial</button></form></section>
+  <section class="panel"><h2>${ic('lock')} Fecho de mês</h2><p class="muted">Depois de conferires e fechares um mês, ninguém (excepto o administrador) pode criar, editar ou anular lançamentos desse mês ou anteriores. Protege os saldos já apresentados.</p>
+  <p>Fechado até: <b>${c.closedThrough?fmt(c.closedThrough):'nenhum mês fechado'}</b></p>
+  <form data-form="close" class="toolbar">${fld('Fechar até ao fim de','month','month',c.closedThrough?c.closedThrough.slice(0,7):today().slice(0,7),1,dis)}<button class="btn primary" ${dis}>Fechar mês</button>${c.closedThrough?`<button type="button" class="btn soft" data-act="reopen" ${dis}>Reabrir tudo</button>`:''}</form></section>
+  <section class="panel"><h2>${ic('settings')} Listas de escolha</h2><form data-form="lists"><div class="fg">${area('Categorias de despesa (uma por linha)','cats',c.expenseCats.join('\n'),'')}${area('Tipos de oferta (uma por linha)','otypes',c.offeringTypes.join('\n'),'')}</div><button class="btn primary" ${dis}>Guardar listas</button></form></section>
+  <section class="panel"><h2>${ic('download')} Cópia de segurança</h2><p class="muted">Os dados estão na nuvem (Firebase). Mesmo assim, guarda uma cópia noutro sítio. Última cópia: <b>${last}</b>.</p><button class="btn primary" data-act="backup">${ic('download')} Descarregar cópia (JSON)</button></section>
+  <section class="panel"><h2>${ic('users')} A minha conta</h2><p class="muted">${esc(S.user.name)} · ${esc(S.user.email)} · ${roleName[S.user.role]}</p>${B.demo?'':`<button class="btn soft" data-act="mypw">${ic('mail')} Enviar e-mail para alterar a palavra-passe</button>`}</section>
+  ${a?`<section class="panel"><h2>${ic('shield')} Regras de segurança do Firestore</h2><p class="muted">Estas regras já devem estar publicadas no Firebase (Firestore Database > Regras). Servem de referência e para voltar a copiar se necessário.</p><button class="btn soft" data-act="copyrules">${ic('copy')} Copiar regras</button><pre class="rules">${esc(RULES_TEXT)}</pre></section>`:''}`;
+}
+function doBackup(){
+  const data={exportedAt:new Date().toISOString(),exportedBy:S.user.email,config:cfg(),tithes:D.tithes,offerings:D.offerings,expenses:D.expenses,transfers:D.transfers,members:D.members};
+  downloadBlob(`igreja-copia-${today()}.json`,JSON.stringify(data,null,1),'application/json');
+  if(isAdmin())B.setSettings({lastBackup:new Date().toISOString()},aud('cópia','Segurança','Cópia de segurança descarregada')).catch(console.warn);
+  toast('Cópia de segurança descarregada.');
+}
+function importMembers(file){
+  const rd=new FileReader();
+  rd.onload=async()=>{
+    try{
+      const lines=String(rd.result).replace(/^﻿/,'').split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
+      const sep=(lines[0]||'').includes(';')?';':',';
+      let rows=lines.map(l=>l.split(sep).map(x=>x.replace(/^"|"$/g,'').trim()));
+      if(rows.length&&/^(nome|name)/i.test(rows[0][0]))rows.shift();
+      const have=new Set(D.members.map(m=>m.name.toLowerCase())),now=new Date().toISOString();
+      const list=[];let dup=0;
+      rows.forEach(r=>{if(!r[0])return;if(have.has(r[0].toLowerCase())){dup++;return}have.add(r[0].toLowerCase());list.push({name:r[0],contact:r[1]||'',email:(r[2]||'').toLowerCase(),address:r[3]||'',status:'active',since:today(),createdAt:now,createdBy:S.user.name,createdByUid:S.user.uid})});
+      if(!list.length)return toast(dup?'Todos os nomes já existem.':'Não encontrei membros no ficheiro. Formato: nome;contacto;e-mail;endereço','error');
+      if(!confirm(`Importar ${list.length} membro(s)?${dup?` (${dup} já existiam e serão ignorados)`:''}`))return;
+      await B.createMany('members',list,aud('importar','Membros',list.length+' membros importados'));
+      toast(list.length+' membro(s) importado(s).');
+    }catch(e){toast(errorText(e),'error')}
+  };
+  rd.readAsText(file,'utf-8');
+}
+
+/* =====================================================================
+   EVENTOS
+   ===================================================================== */
+const findRec=(type,id)=>D[type].find(r=>r.id===id);
+function guard(fn){return async(...a)=>{try{await fn(...a)}catch(e){if(!e.silent)toast(errorText(e),'error')}}}
+document.addEventListener('click',guard(async e=>{
+  bumpIdle();
+  const b=e.target.closest('[data-act]');if(!b||b.tagName==='INPUT')return;
+  const a=b.dataset.act,id=b.dataset.id,type=b.dataset.type;
+  if(a==='nav')go(b.dataset.page);
+  else if(a==='logout')logout();
+  else if(a==='menu'){S.menu=!S.menu;$('.side').classList.toggle('open',S.menu)}
+  else if(a==='theme'){const d=!document.body.classList.contains('dark');document.body.classList.toggle('dark',d);try{localStorage.setItem('igreja_dark',d?'1':'')}catch(x){}render()}
+  else if(a==='authtab')authView(b.dataset.tab);
+  else if(a==='forgot'){const em=String(document.querySelector('[name=email]').value).trim();if(!em)return toast('Escreve o teu e-mail e clica outra vez.','error');await B.resetPw(em);toast('Se o e-mail existir, vais receber uma ligação para redefinir a palavra-passe.')}
+  else if(a==='add'){if(canWrite())recordForm(type,null)}
+  else if(a==='edit'){if(canWrite()){const r=findRec(type,id);if(r&&lockedFor(r.date||'')&&type!=='members')return toast('O mês está fechado.','error');recordForm(type,r)}}
+  else if(a==='void'){if(canWrite())voidForm(type,findRec(type,id))}
+  else if(a==='restore'){if(isAdmin())restoreRecord(type,findRec(type,id))}
+  else if(a==='receipt')downloadReceipt(type,findRec(type,id));
+  else if(a==='transfer'){if(canWrite())transferForm()}
+  else if(a==='hist')memberHistory(findRec('members',id));
+  else if(a==='mimport')$('#mfile').click();
+  else if(a==='filter'){S.from=$('#from')?$('#from').value:'';S.to=$('#to')?$('#to').value:'';S.q=$('#q').value;S.pg=1;render()}
+  else if(a==='clear'){S.from='';S.to='';S.q='';S.pg=1;render()}
+  else if(a==='prev'){S.pg--;render()}
+  else if(a==='next'){S.pg++;render()}
+  else if(a==='rpick'){if($('#rfrom')){S.rfrom=$('#rfrom').value;S.rto=$('#rto').value}S.repKind=b.dataset.kind;S.rep=null;reportsPage()}
+  else if(a==='rquick'){S.page='reports';S.repKind=b.dataset.kind;S.rep=null;render();showReport()}
+  else if(a==='rpreset'){
+    const p=b.dataset.p,t=today();let f,u=t;
+    if(p==='month')f=t.slice(0,8)+'01';
+    else if(p==='prev'){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()-1);const m=d.getFullYear()+'-'+pad(d.getMonth()+1);f=m+'-01';u=monthEnd(m)}
+    else f=t.slice(0,4)+'-01-01';
+    $('#rfrom').value=f;$('#rto').value=u;
+  }
+  else if(a==='rpreview')showReport();
+  else if(a==='rpdf'){const r=showReport();downloadBlob(repFile(r,'pdf'),pdfReport(r,cfg(),S.user.name),'application/pdf');toast('PDF descarregado.')}
+  else if(a==='rcsv'){const r=showReport();downloadBlob(repFile(r,'csv'),reportCsv(r),'text/csv;charset=utf-8');toast('Ficheiro para Excel descarregado.')}
+  else if(a==='rprint'){if(!S.rep)showReport();window.print()}
+  else if(a==='uapprove'){
+    const role=document.querySelector(`[data-urole="${id}"]`).value;if(role==='pending')return toast('Escolhe a função antes de aprovar.','error');
+    const u=D.users.find(x=>x.uid===id);
+    await B.updateUser(id,{role,status:'approved',active:true,updatedAt:new Date().toISOString()},aud('aprovar','Utilizadores',u.name+' · '+roleName[role]));toast('Conta aprovada.');
+  }
+  else if(a==='urole'){
+    const role=document.querySelector(`[data-urole="${id}"]`).value,u=D.users.find(x=>x.uid===id);
+    if(!confirm(`Atribuir a função ${roleName[role]} a ${u.name}?`))return;
+    await B.updateUser(id,{role,updatedAt:new Date().toISOString()},aud('função','Utilizadores',u.name+' > '+roleName[role]));toast('Função actualizada.');
+  }
+  else if(a==='utoggle'){const u=D.users.find(x=>x.uid===id),on=u.active===false;await B.updateUser(id,{active:on,updatedAt:new Date().toISOString()},aud(on?'activar':'desactivar','Utilizadores',u.name));toast(on?'Conta activada.':'Conta desactivada.')}
+  else if(a==='ureset'){const u=D.users.find(x=>x.uid===id);await B.resetPw(u.email);toast('E-mail de redefinição enviado a '+u.email+'.')}
+  else if(a==='mypw'){await B.resetPw(S.user.email);toast('Enviámos um e-mail para '+S.user.email+'.')}
+  else if(a==='addacc'){
+    const inp=$('#newacc'),name=inp.value.trim();if(!name)return toast('Escreve o nome da nova conta.','error');
+    const row=document.createElement('div');row.className='accrow';
+    row.innerHTML=`<input data-an value="${esc(name)}" aria-label="Nome da conta"><input data-ao value="0" inputmode="decimal" aria-label="Saldo inicial"><label class="nowrap"><input type="checkbox" data-aa checked> activa</label>`;
+    $('#accrows').append(row);inp.value='';
+  }
+  else if(a==='reopen'){if(!confirm('Reabrir todos os meses? Os utilizadores poderão voltar a alterar lançamentos antigos.'))return;await B.setSettings({closedThrough:''},aud('reabrir','Definições','Fecho de mês removido'));toast('Meses reabertos.')}
+  else if(a==='backup')doBackup();
+  else if(a==='copyrules'){try{await navigator.clipboard.writeText(RULES_TEXT);toast('Regras copiadas.')}catch(x){const t=document.querySelector('pre.rules');const r=document.createRange();r.selectNodeContents(t);const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Selecciona e copia com Ctrl+C.','error')}}
+  else if(a==='copyrules2'){try{await navigator.clipboard.writeText(RULES_TEXT);toast('Regras copiadas.')}catch(x){toast('Não foi possível copiar automaticamente. Selecciona o texto e usa Ctrl+C.','error')}}
+  else if(a==='retry')location.reload();
+}));
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.id==='mfile'&&t.files[0]){importMembers(t.files[0]);t.value=''}
+  if(t.dataset&&t.dataset.act==='showvoid'){S.showVoid=t.checked;S.pg=1;render()}
+});
+document.addEventListener('keydown',e=>{bumpIdle();if(e.key==='Enter'&&e.target.id==='q'){e.preventDefault();document.querySelector('[data-act="filter"]').click()}});
+document.addEventListener('submit',guard(async e=>{
+  const kind=e.target.dataset&&e.target.dataset.form;if(!kind)return;
+  e.preventDefault();const btn=e.submitter,f=new FormData(e.target);if(btn)btn.disabled=true;
+  try{
+    if(kind==='login')await doLogin(f);
+    else if(kind==='signup')await doSignup(f,false);
+    else if(kind==='setup')await doSignup(f,true);
+    else if(kind==='church'){
+      if(!isAdmin())throw Error('Apenas o administrador pode alterar.');
+      const n=String(f.get('churchName')).trim();if(!n)throw Error('Introduz o nome.');
+      await B.setSettings({churchName:n},aud('editar','Definições','Nome da igreja'));toast('Nome guardado.');
+    }
+    else if(kind==='opening'){
+      if(!isAdmin())throw Error('Apenas o administrador pode alterar.');
+      const od=String(f.get('openingDate'));if(!od)throw Error('Indica a data de arranque.');
+      const ex=cfg().accounts;
+      const accounts=[...document.querySelectorAll('.accrow')].map((row,i)=>({id:i<ex.length?ex[i].id:'a'+Date.now().toString(36)+i,name:row.querySelector('[data-an]').value.trim(),opening:parseAmount(row.querySelector('[data-ao]').value),active:row.querySelector('[data-aa]').checked}));
+      if(!accounts.length)throw Error('É preciso pelo menos uma conta.');
+      if(accounts.some(x=>!x.name))throw Error('Todas as contas precisam de nome.');
+      if(accounts.some(x=>!Number.isFinite(x.opening)))throw Error('Verifica os valores dos saldos iniciais.');
+      if(!accounts.some(x=>x.active))throw Error('Deixa pelo menos uma conta activa.');
+      const early=[...D.tithes,...D.offerings,...D.expenses,...D.transfers].filter(r=>r.date<od&&r.status!=='voided').length;
+      if(early)throw Error(`Existem ${early} lançamento(s) anteriores a ${fmt(od)}. Usa uma data de arranque igual ou anterior ao primeiro lançamento.`);
+      const had=cfg().openingDate;
+      if(had&&(had!==od||JSON.stringify(cfg().accounts.map(x=>x.opening))!==JSON.stringify(accounts.map(x=>x.opening)))&&!confirm('Alterar o saldo inicial altera todos os saldos já calculados. Confirmas?'))throw silent();
+      await B.setSettings({openingDate:od,accounts},aud('editar','Definições','Saldo inicial '+fmt(od)+' · total '+money(accounts.reduce((s,x)=>s+x.opening,0))));
+      toast('Saldo inicial guardado.');
+    }
+    else if(kind==='close'){
+      if(!isAdmin())throw Error('Apenas o administrador pode fechar meses.');
+      const m=String(f.get('month'));if(!/^\d{4}-\d{2}$/.test(m))throw Error('Escolhe o mês.');
+      if(m>today().slice(0,7))throw Error('Não podes fechar um mês que ainda não começou.');
+      if(!confirm(`Fechar até ao fim de ${monthLabel(m)}? Depois disto só o administrador altera esses meses.`))throw silent();
+      await B.setSettings({closedThrough:monthEnd(m)},aud('fechar mês','Definições','Fechado até '+fmt(monthEnd(m))));toast('Mês fechado.');
+    }
+    else if(kind==='lists'){
+      if(!isAdmin())throw Error('Apenas o administrador pode alterar.');
+      const l=t=>[...new Set(String(t).split('\n').map(x=>x.trim()).filter(Boolean))];
+      const cats=l(f.get('cats')),ot=l(f.get('otypes'));if(!cats.length||!ot.length)throw Error('As listas não podem ficar vazias.');
+      await B.setSettings({expenseCats:cats,offeringTypes:ot},aud('editar','Definições','Listas de categorias e tipos'));toast('Listas guardadas.');
+    }
+  }catch(err){if(btn)btn.disabled=false;throw err}
+  if(btn)btn.disabled=false;
+}));
+
+/* =====================================================================
+   ARRANQUE
+   ===================================================================== */
+function guideView(reason){
+  $('#app').innerHTML=`<div class="auth" style="grid-template-columns:1fr"><section class="ap" style="max-width:760px;margin:auto"><h2>Falta preparar o Firebase</h2><p class="muted">${esc(reason)}</p>
+  <ol style="line-height:1.7;padding-left:20px"><li>No <b>Firebase Console</b> (projecto <b>gestaofinanceira-150a7</b>) abre <b>Authentication > Sign-in method</b> e activa <b>E-mail/Palavra-passe</b>.</li><li>Abre <b>Firestore Database</b> e clica em <b>Criar base de dados</b> (modo de produção).</li><li>Em <b>Firestore Database > Regras</b>, apaga o que lá está, cola as regras abaixo e clica em <b>Publicar</b>.</li><li>Volta aqui e clica em <b>Tentar novamente</b>.</li></ol>
+  <div class="quick"><button class="btn soft" data-act="copyrules2">${ic('copy')} Copiar regras</button><button class="btn primary" data-act="retry">Tentar novamente</button></div><pre class="rules">${esc(RULES_TEXT)}</pre>
+  <p class="muted" style="font-size:12px">Não precisas do plano pago do Firebase: este sistema não usa Cloud Functions.</p></section></div>`;
+}
+async function boot(){
+  window.__started=true;
+  try{if(localStorage.getItem('igreja_dark'))document.body.classList.add('dark')}catch(e){}
+  B=location.hash==='#demo'?makeDemo():makeFirebase();
+  try{await B.init()}catch(e){console.error(e);$('#app').innerHTML=`<div class="center-screen"><h2 style="color:var(--ink)">Não foi possível carregar o Firebase</h2><p style="max-width:520px">Verifica a ligação à Internet. O sistema precisa de Internet para carregar o Firebase.<br><small>${esc(e.message||'')}</small></p><button class="btn primary" data-act="retry" style="margin:auto">Tentar novamente</button></div>`;return}
+  S.initDone=await B.getInit();
+  if(S.initDone===null){guideView('Não foi possível ler a base de dados. Isto acontece quando o Firestore ainda não foi criado, as regras ainda não foram publicadas ou não há Internet.');return}
+  B.onAuth(handleAuth);
+}
+window.IGREJA={S,D,cfg,balance,totalBalance,reportData,pdfReport,pdfReceipt,reportCsv,get B(){return B}};
+boot();
+</script>
+</body>
+</html>
